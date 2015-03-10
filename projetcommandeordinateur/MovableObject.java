@@ -25,7 +25,7 @@ public class MovableObject {
     final double G;
     
     public MovableObject(double m, double xi, double yi, double te){
-        this.G = 9.81;
+        this.G = 0;
         this.m = m;
         this.X = xi;
         this.Y = yi;
@@ -39,21 +39,21 @@ public class MovableObject {
     }
     
     public void changePx(double npx){
-        this.px = npx;
+        this.px += npx;
     }
     
     public void changePy(double npy){
-        this.py = npy;
+        this.py += npy;
     }
     
-    public void actualizeSpeed(int te){
+    public void actualizeSpeed(){
         vx +=  ( px / m ) * Te;
         vy += ( py / m - G ) * Te; 
     }
     
-    public void actualizePosition(int te){
-        X += ( px / ( 2 * m ) ) * Te * Te;
-        Y += ( py / ( 2 * m ) - G ) * Te * Te;
+    public void actualizePosition(){
+        X += vx * Te;
+        Y += vy * Te;
     }
 
     public int getX() {
