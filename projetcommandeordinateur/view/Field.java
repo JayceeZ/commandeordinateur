@@ -26,14 +26,24 @@ public class Field extends JPanel {
         super.paint(g);
         // TODO: Draw the field
 
-        g.drawRect(movableObject.getX(), movableObject.getY(), 20, 20);
+        // Dessine le vaisseau
+        movableObject.dessine(g);
     }
     
     public void actualizeObjects(){
         movableObject.actualizeSpeed();
         movableObject.actualizePosition();
+        movableObject.testCollision(this);
     }
-    
+
+    public boolean testCollisionBord(int x, int y) {
+        if(x < 0 || y < 0)
+            return true;
+        if(x > this.getWidth() || y > this.getHeight())
+            return true;
+        return false;
+    }
+
     public void keyTyped(char c){
         switch(c){
             case 'z' :
