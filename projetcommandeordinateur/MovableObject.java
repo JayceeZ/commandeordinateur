@@ -11,10 +11,14 @@ package projetcommandeordinateur;
  * @author Alex
  */
 public class MovableObject {
-    
+
+    /**
+     * Positions initiales
+     */
+    double initX;
+    double initY;
+
     double m;
-    double X;
-    double Y;
     double x;
     double y;
     double vx;
@@ -28,14 +32,14 @@ public class MovableObject {
     
     public MovableObject(double m, double xi, double yi, double te){
 
-        // pour le reset de position
-        this.X = xi;
-        this.Y = yi;
+        // on définie la position initiale
+        this.initX = xi;
+        this.initY = yi;
 
         this.G = 0;
         this.m = m;
-        this.x = X;
-        this.y = Y;
+        this.x = initX;
+        this.y = initY;
         this.vx = 0;
         this.vy = 0;
         this.ax = 0;
@@ -85,8 +89,8 @@ public class MovableObject {
      */
     public void respawn() {
         stop();
-        x = X;
-        y = Y;
+        x = initX;
+        y = initY;
         vx = 0;
         vy = 0;
     }

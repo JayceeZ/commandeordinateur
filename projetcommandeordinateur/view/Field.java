@@ -26,7 +26,7 @@ public class Field extends JPanel {
         super.paint(g);
         // TODO: Draw the field
 
-        g.drawRect(movableObject.getX(), movableObject.getY(), 20, 20);
+        g.drawRect(movableObject.getInitX(), movableObject.getInitY(), 20, 20);
     }
     
     public void actualizeObjects(){
