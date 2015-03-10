@@ -8,7 +8,8 @@ import java.awt.event.*;
  * Created by isoard on 03/03/15.
  */
 public class Window extends JFrame implements KeyListener{
-    Field field;
+    private final InfoPanel infoPanel;
+    private final Field field;
 
     public Window() {
         super();
@@ -17,10 +18,13 @@ public class Window extends JFrame implements KeyListener{
         this.setResizable(false);
 
         field = new Field();
+        infoPanel = new InfoPanel();
+        this.add(infoPanel, BorderLayout.NORTH);
         this.add(field, BorderLayout.CENTER);
         
         addKeyListener(this);
 
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
     }
     
@@ -41,5 +45,6 @@ public class Window extends JFrame implements KeyListener{
         field.actualizeObjects();
         revalidate();
         field.repaint();
+        infoPanel.display(field.getGameStatusMessage());
     }
 }

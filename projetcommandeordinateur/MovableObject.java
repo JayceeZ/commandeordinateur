@@ -36,7 +36,7 @@ public class MovableObject {
         this.initX = xi;
         this.initY = yi;
 
-        this.G = 0;
+        this.G = -9.81;
         this.m = m;
         this.x = initX;
         this.y = initY;
@@ -93,5 +93,21 @@ public class MovableObject {
         y = initY;
         vx = 0;
         vy = 0;
+    }
+
+    public double getVx() {
+        return vx;
+    }
+
+    public double getVy() {
+        return vy;
+    }
+
+    public double getPx() {
+        return px;
+    }
+
+    public double getPy() {
+        return py;
     }
 }

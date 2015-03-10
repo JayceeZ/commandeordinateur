@@ -10,7 +10,7 @@ import java.awt.*;
  */
 public class Field extends JPanel {
     private MovableObject movableObject;
-    private static final double TIME = 1;
+    private static final double TIME = 0.04;
     private static final double PUSH_POWER = 1;
 
     public Field() {
@@ -52,5 +52,9 @@ public class Field extends JPanel {
                 movableObject.respawn();
                 break;
         }
+    }
+
+    public String getGameStatusMessage() {
+        return "Propulsion: Px:"+movableObject.getPx()+" Py:"+movableObject.getPy();
     }
 }

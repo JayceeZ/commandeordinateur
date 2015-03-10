@@ -20,7 +20,7 @@ public class ProjetCommandeOrdinateur {
     public static void main(String[] args) throws InterruptedException {
         Window window = new Window();
         while(true){
-            Thread.sleep(100);
+            Thread.sleep(40);
             window.actualize();
         }
     }
