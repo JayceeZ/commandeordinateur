@@ -48,6 +48,9 @@ public class Field extends JPanel {
             case 'd' :
                 movableObject.changePx(PUSH_POWER);
                 break;
+            case ' ':
+                movableObject.respawn();
+                break;
         }
     }
 }

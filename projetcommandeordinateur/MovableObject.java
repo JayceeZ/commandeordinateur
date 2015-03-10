@@ -15,6 +15,8 @@ public class MovableObject {
     double m;
     double X;
     double Y;
+    double x;
+    double y;
     double vx;
     double vy;
     double ax;
@@ -25,10 +27,15 @@ public class MovableObject {
     final double G;
     
     public MovableObject(double m, double xi, double yi, double te){
-        this.G = 0;
-        this.m = m;
+
+        // pour le reset de position
         this.X = xi;
         this.Y = yi;
+
+        this.G = 0;
+        this.m = m;
+        this.x = X;
+        this.y = Y;
         this.vx = 0;
         this.vy = 0;
         this.ax = 0;
@@ -52,15 +59,35 @@ public class MovableObject {
     }
     
     public void actualizePosition(){
-        X += vx * Te;
-        Y += vy * Te;
+        x += vx * Te;
+        y += vy * Te;
     }
 
     public int getX() {
-        return (int) X;
+        return (int) x;
     }
 
     public int getY() {
-        return (int) Y;
+        return (int) y;
+    }
+
+    /**
+     * Eteint les propulseurs
+     */
+    public void stop() {
+        px = 0;
+        py = 0;
+        actualizeSpeed();
+    }
+
+    /**
+     * Réinitialise la position
+     */
+    public void respawn() {
+        stop();
+        x = X;
+        y = Y;
+        vx = 0;
+        vy = 0;
     }
 }
