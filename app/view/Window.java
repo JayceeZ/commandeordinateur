@@ -1,4 +1,4 @@
-package projetcommandeordinateur.view;
+package app.view;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,9 +7,10 @@ import java.awt.event.*;
 /**
  * Created by isoard on 03/03/15.
  */
-public class Window extends JFrame implements KeyListener{
+public class Window extends JFrame implements KeyListener, ActionListener {
     private final InfoPanel infoPanel;
     private final Field field;
+    private Timer timer;
 
     public Window() {
         super();
@@ -34,17 +35,30 @@ public class Window extends JFrame implements KeyListener{
     }
 
     public void keyPressed(KeyEvent e) {
-    //Invoked when a key has been pressed.
+        //Do nothing
     }
 
     public void keyReleased(KeyEvent e) {
-    //Invoked when a key has been released.
+        //Do nothing
     }
     
     public void actualize(){
         field.actualizeObjects();
-        revalidate();
         field.repaint();
         infoPanel.display(field.getGameStatusMessage());
+    }
+
+    public void start() {
+        timer = new Timer((int) (Field.Te*1000), this);
+        timer.start();
+    }
+
+    public void stop() {
+        timer.stop();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        actualize();
     }
 }

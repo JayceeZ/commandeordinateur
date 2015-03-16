@@ -1,22 +1,30 @@
-package projetcommandeordinateur.view;
+package app.view;
 
-import projetcommandeordinateur.MovableObject;
+import app.model.MovableObject;
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by isoard on 03/03/15.
+ * Représente le terrain de jeu
  */
 public class Field extends JPanel {
     private MovableObject movableObject;
-    private static final double TIME = 0.04;
-    private static final double PUSH_POWER = 1;
+    private static final double MASS = 1;
+
+    // Période d'échantillonage en secondes
+    public static final double Te = 0.04;
+
+    // Pas de puissance des réacteurs
+    private static final double PUSH_POWER = 0.1;
+
+    // Propriètés physiques du monde
+    private static final double G = -9.81;
 
     public Field() {
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        movableObject = new MovableObject(1, 400, 0, TIME);
+        movableObject = new MovableObject(MASS, 400, 0);
 
         this.setVisible(true);
     }
@@ -29,7 +37,7 @@ public class Field extends JPanel {
         // Dessine le vaisseau
         movableObject.dessine(g);
     }
-    
+
     public void actualizeObjects(){
         movableObject.actualizeSpeed();
         movableObject.actualizePosition();
@@ -65,6 +73,14 @@ public class Field extends JPanel {
     }
 
     public String getGameStatusMessage() {
-        return "Propulsion: Px:"+movableObject.getPx()+" Py:"+movableObject.getPy();
+        String propulsion = "Propulsion: Px:"+movableObject.getPx()+" Py:"+movableObject.getPy();
+        String vitesse = "Vitesse: Vx:"+movableObject.getVx()+" Vy:"+movableObject.getVy();
+        String position = "Position: x:"+movableObject.getX()+" y:"+movableObject.getY();
+
+        return propulsion+" "+vitesse+" "+position;
+    }
+
+    public static double getG() {
+        return G;
     }
 }

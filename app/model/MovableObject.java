@@ -4,47 +4,48 @@
  * and open the template in the editor.
  */
 
-package projetcommandeordinateur;
+package app.model;
 
-import projetcommandeordinateur.view.Field;
+import app.view.Field;
 
 import java.awt.*;
 
 /**
- *
+ * Représente l'objet contrôlable
  * @author Alex
  */
 public class MovableObject {
-
     // Taille de l'objet
-    private final int size;
-    /**
-     * Positions initiales
-     */
-    double initX;
-    double initY;
+    private static final int SIZE = 20;
 
-    double m;
-    double x;
-    double y;
-    double vx;
-    double vy;
-    double ax;
-    double ay;
-    double px;
-    double py;
-    double Te;
-    final double G;
+    // Positions initiales
+    private int initX;
+    private int initY;
+
+    // Propriétés physiques de l'objet
+    private double m;
+
+    // Position de l'objet
+    private double x;
+    private double y;
+
+    // Vitesse de l'objet
+    private double vx;
+    private double vy;
+    // Accélération de l'objet
+    private double ax;
+    private double ay;
+
+    // Niveau de propulsion des réacteurs
+    private double px;
+    private double py;
     
-    public MovableObject(double m, double xi, double yi, double te){
+    public MovableObject(double m, int xi, int yi){
 
         // on définie la position initiale
         this.initX = xi;
         this.initY = yi;
 
-        this.size = 20;
-
-        this.G = -9.81;
         this.m = m;
         this.x = initX;
         this.y = initY;
@@ -54,7 +55,6 @@ public class MovableObject {
         this.ay = 0;
         this.px = 0;
         this.py = 0;
-        this.Te = te;
     }
     
     public void changePx(double npx){
@@ -66,13 +66,13 @@ public class MovableObject {
     }
     
     public void actualizeSpeed(){
-        vx +=  ( px / m ) * Te;
-        vy += ( py / m - G ) * Te; 
+        vx += ( px / m ) * Field.Te;
+        vy += ((py / m) - Field.getG()) * Field.Te;
     }
     
     public void actualizePosition(){
-        x += vx * Te;
-        y += vy * Te;
+        x += vx * Field.Te;
+        y += vy * Field.Te;
     }
 
     public int getX() {
@@ -103,35 +103,52 @@ public class MovableObject {
         vy = 0;
     }
 
+    /**
+     * Donne la vitesse horizontale de l'objet
+     * @return
+     */
     public double getVx() {
         return vx;
     }
 
+    /**
+     * Donne la vitesse verticale de l'objet
+     * @return
+     */
     public double getVy() {
         return vy;
     }
 
+    /**
+     * Donne la propulsion horizontale de l'objet
+     * @return
+     */
     public double getPx() {
         return px;
     }
 
+    /**
+     * Donne la propulsion verticale de l'objet
+     * @return
+     */
     public double getPy() {
         return py;
     }
 
     public void dessine(Graphics g) {
-        g.drawRect(this.getX(), this.getY(), size, size);
+        g.drawRect(this.getX(), this.getY(), SIZE, SIZE);
 
         // propulsion gauche/droite
-        g.drawLine(this.getX()+size/2, this.getY()+size/2, (int) (this.getX()+size/2-px), this.getY()+size/2);
+        g.drawLine(this.getX()+SIZE/2, this.getY()+SIZE/2, (int) (this.getX()+SIZE/2-px), this.getY()+SIZE/2);
         // propulsion haut/bas
-        g.drawLine(this.getX()+size/2, this.getY()+size/2, this.getX()+size/2, (int) (this.getY()+size/2-py));
+        g.drawLine(this.getX()+SIZE/2, this.getY()+SIZE/2, this.getX()+SIZE/2, (int) (this.getY()+SIZE/2-py));
     }
 
     public void testCollision(Field field) {
         int x = (int) this.x;
         int y = (int) this.y;
-        if(field.testCollisionBord(x,y) || field.testCollisionBord(x+size, y) || field.testCollisionBord(x,y+size) || field.testCollisionBord(x+size, y+size)) {
+
+        if(field.testCollisionBord(x,y) || field.testCollisionBord(x+SIZE, y) || field.testCollisionBord(x,y+SIZE) || field.testCollisionBord(x+SIZE, y+SIZE)) {
             this.respawn();
         }
     }
