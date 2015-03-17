@@ -152,4 +152,13 @@ public class MovableObject {
             this.respawn();
         }
     }
+
+    public void testCollision(StaticObject staticObject) {
+        int x = (int) this.x;
+        int y = (int) this.y;
+
+        if(staticObject.appartient(x, y) || staticObject.appartient(x + SIZE, y) || staticObject.appartient(x, y + SIZE) || staticObject.appartient(x + SIZE, y + SIZE)) {
+            this.respawn();
+        }
+    }
 }

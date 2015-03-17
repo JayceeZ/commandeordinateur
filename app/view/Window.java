@@ -10,7 +10,11 @@ import java.awt.event.*;
 public class Window extends JFrame implements KeyListener, ActionListener {
     private final InfoPanel infoPanel;
     private final Field field;
-    private Timer timer;
+
+    // Pas de puissance des réacteurs
+    private static final double PUSH_POWER = 1;
+    private Timer timerField;
+    private Timer timerInfos;
 
     public Window() {
         super();
@@ -28,10 +32,25 @@ public class Window extends JFrame implements KeyListener, ActionListener {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
     }
-    
-    public void keyTyped(KeyEvent e) {
-        char c = e.getKeyChar();
-        field.keyTyped(c);
+
+    public void keyTyped(KeyEvent keyEvent){
+        switch(keyEvent.getKeyChar()){
+            case 's' :
+                field.changePy(-PUSH_POWER);
+                break;
+            case 'z' :
+                field.changePy(PUSH_POWER);
+                break;
+            case 'd' :
+                field.changePx(-PUSH_POWER);
+                break;
+            case 'q' :
+                field.changePx(PUSH_POWER);
+                break;
+            case ' ':
+                field.restart();
+                break;
+        }
     }
 
     public void keyPressed(KeyEvent e) {
@@ -43,22 +62,22 @@ public class Window extends JFrame implements KeyListener, ActionListener {
     }
     
     public void actualize(){
-        field.actualizeObjects();
-        field.repaint();
-        infoPanel.display(field.getGameStatusMessage());
     }
 
     public void start() {
-        timer = new Timer((int) (Field.Te*1000), this);
-        timer.start();
+        timerField = new Timer((int) (Field.Te*1000), field);
+        timerField.start();
+        timerInfos = new Timer(1, this);
+        timerInfos.start();
     }
 
     public void stop() {
-        timer.stop();
+        timerField.stop();
     }
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        actualize();
+        infoPanel.display(field.getGameStatusMessage());
+        infoPanel.revalidate();
     }
 }

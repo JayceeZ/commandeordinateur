@@ -1,22 +1,23 @@
 package app.view;
 
 import app.model.MovableObject;
+import app.model.StaticObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Représente le terrain de jeu
  */
-public class Field extends JPanel {
+public class Field extends JPanel implements ActionListener {
+    private final StaticObject[] staticObjects;
     private MovableObject movableObject;
     private static final double MASS = 1;
 
     // Période d'échantillonage en secondes
     public static final double Te = 0.04;
-
-    // Pas de puissance des réacteurs
-    private static final double PUSH_POWER = 0.1;
 
     // Propriètés physiques du monde
     private static final double G = -9.81;
@@ -25,6 +26,16 @@ public class Field extends JPanel {
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         movableObject = new MovableObject(MASS, 400, 0);
+        staticObjects = new StaticObject[8];
+
+        staticObjects[0] = new StaticObject(0, 0, 40, 200);
+        staticObjects[1] = new StaticObject(100, 100, 200, 200);
+        staticObjects[2] = new StaticObject(280, 100, 400, 140);
+        staticObjects[3] = new StaticObject(0, 0, 40, 200);
+        staticObjects[4] = new StaticObject(0, 0, 40, 200);
+        staticObjects[5] = new StaticObject(0, 0, 40, 200);
+        staticObjects[6] = new StaticObject(0, 0, 40, 200);
+        staticObjects[7] = new StaticObject(0, 0, 40, 200);
 
         this.setVisible(true);
     }
@@ -33,15 +44,31 @@ public class Field extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
         // TODO: Draw the field
+        for (StaticObject staticObject : staticObjects) {
+            staticObject.dessine(g);
+        }
+
 
         // Dessine le vaisseau
         movableObject.dessine(g);
+    }
+
+    public void changePx(double npx) {
+        movableObject.changePx(npx);
+    }
+
+    public void changePy(double npy) {
+        movableObject.changePy(npy);
     }
 
     public void actualizeObjects(){
         movableObject.actualizeSpeed();
         movableObject.actualizePosition();
         movableObject.testCollision(this);
+
+        for (StaticObject staticObject : staticObjects) {
+            movableObject.testCollision(staticObject);
+        }
     }
 
     public boolean testCollisionBord(int x, int y) {
@@ -50,26 +77,6 @@ public class Field extends JPanel {
         if(x > this.getWidth() || y > this.getHeight())
             return true;
         return false;
-    }
-
-    public void keyTyped(char c){
-        switch(c){
-            case 'z' :
-                movableObject.changePy(-PUSH_POWER);
-                break;
-            case 's' :
-                movableObject.changePy(PUSH_POWER);
-                break;
-            case 'q' :
-                movableObject.changePx(-PUSH_POWER);
-                break;
-            case 'd' :
-                movableObject.changePx(PUSH_POWER);
-                break;
-            case ' ':
-                movableObject.respawn();
-                break;
-        }
     }
 
     public String getGameStatusMessage() {
@@ -82,5 +89,15 @@ public class Field extends JPanel {
 
     public static double getG() {
         return G;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        this.actualizeObjects();
+        this.repaint();
+    }
+
+    public void restart() {
+        movableObject.respawn();
     }
 }
