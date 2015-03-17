@@ -1,5 +1,6 @@
 package app.view;
 
+import app.model.Command;
 import app.model.MovableObject;
 import app.model.StaticObject;
 
@@ -26,6 +27,9 @@ public class Field extends JPanel implements ActionListener {
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         movableObject = new MovableObject(MASS, 400, 0);
+        movableObject.setCommand(new Command(600,200,0.0514048,0.1265232));
+        movableObject.setCommandOn(true);
+
         staticObjects = new StaticObject[8];
 
         staticObjects[0] = new StaticObject(0, 0, 40, 200);
@@ -62,6 +66,12 @@ public class Field extends JPanel implements ActionListener {
     }
 
     public void actualizeObjects(){
+        if(movableObject.isCommandOn()){
+            Command command = movableObject.getCommand();
+            movableObject.setPx(command.getKx()*(command.getXf()-movableObject.getX()));
+            movableObject.setPy(command.getKy() * (command.getYf() - movableObject.getY()));
+
+        }
         movableObject.actualizeSpeed();
         movableObject.actualizePosition();
         movableObject.testCollision(this);

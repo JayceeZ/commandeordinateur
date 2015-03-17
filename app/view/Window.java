@@ -78,6 +78,5 @@ public class Window extends JFrame implements KeyListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         infoPanel.display(field.getGameStatusMessage());
-        infoPanel.revalidate();
     }
 }

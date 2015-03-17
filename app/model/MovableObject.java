@@ -39,6 +39,10 @@ public class MovableObject {
     // Niveau de propulsion des réacteurs
     private double px;
     private double py;
+
+    // Commande automatique
+    private boolean commandOn;
+    private Command command;
     
     public MovableObject(double m, int xi, int yi){
 
@@ -55,6 +59,8 @@ public class MovableObject {
         this.ay = 0;
         this.px = 0;
         this.py = 0;
+        this.commandOn = false;
+        this.command = new Command();
     }
     
     public void changePx(double npx){
@@ -63,6 +69,14 @@ public class MovableObject {
     
     public void changePy(double npy){
         this.py += npy;
+    }
+
+    public void setPx(double npx){
+        this.px = npx;
+    }
+
+    public void setPy(double npy){
+        this.py = npy;
     }
     
     public void actualizeSpeed(){
@@ -133,6 +147,22 @@ public class MovableObject {
      */
     public double getPy() {
         return py;
+    }
+
+    public void setCommand(Command c){
+        this.command = c;
+    }
+
+    public Command getCommand(){
+        return command;
+    }
+
+    public void setCommandOn(boolean c){
+        this.commandOn = c;
+    }
+
+    public boolean isCommandOn(){
+        return commandOn;
     }
 
     public void dessine(Graphics g) {
