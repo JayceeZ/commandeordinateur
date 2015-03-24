@@ -2,6 +2,7 @@ package app.view;
 
 import app.model.Command;
 import app.model.MovableObject;
+import app.model.Observer;
 import app.model.StaticObject;
 
 import javax.swing.*;
@@ -13,18 +14,41 @@ import java.awt.event.ActionListener;
  * Représente le terrain de jeu
  */
 public class Field extends JPanel implements ActionListener {
-    private final StaticObject[] staticObjects;
+    private StaticObject[] staticObjects;
     private MovableObject movableObject;
+    private Observer observer;
     private static final double MASS = 1;
+    private int scenario;
 
     // Période d'échantillonage en secondes
     public static final double Te = 0.04;
 
     // Propriètés physiques du monde
-    private static final double G = -9.81;
+    private static double G;
 
-    public Field() {
+    public Field(int scenario) {
+        this.scenario = scenario;
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        switch(scenario){
+            case 1 :
+                init();
+                break;
+            case 2 :
+                initERP();
+                break;
+        }
+        this.setVisible(true);
+    }
+
+    private void initERP(){
+        G = 0;
+        movableObject = new MovableObject(MASS, 0, 200);
+        movableObject.setVx(20);
+        observer = new Observer(200,200,100,0,3);
+
+    }
+
+    private void init(){
 
         movableObject = new MovableObject(MASS, 400, 0);
         movableObject.setCommand(new Command(600,200,0.0514048,0.1265232));
@@ -41,20 +65,25 @@ public class Field extends JPanel implements ActionListener {
         staticObjects[6] = new StaticObject(0, 0, 40, 200);
         staticObjects[7] = new StaticObject(0, 0, 40, 200);
 
-        this.setVisible(true);
+        G = -9.81;
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         // TODO: Draw the field
-        for (StaticObject staticObject : staticObjects) {
-            staticObject.dessine(g);
-        }
-
+        if(staticObjects != null)
+            for (StaticObject staticObject : staticObjects) {
+                staticObject.dessine(g);
+            }
 
         // Dessine le vaisseau
         movableObject.dessine(g);
+        if(observer != null){
+            observer.dessine(g);
+            g.drawLine(movableObject.getX(), movableObject.getY(), observer.getX(), observer.getY());
+            g.drawLine(observer.getX(),observer.getY(),observer.getX(),observer.getY()-100);
+        }
     }
 
     public void changePx(double npx) {
@@ -75,9 +104,13 @@ public class Field extends JPanel implements ActionListener {
         movableObject.actualizeSpeed();
         movableObject.actualizePosition();
         movableObject.testCollision(this);
+        if(staticObjects != null)
+            for (StaticObject staticObject : staticObjects) {
+                movableObject.testCollision(staticObject);
+            }
 
-        for (StaticObject staticObject : staticObjects) {
-            movableObject.testCollision(staticObject);
+        if(observer != null){
+            observer.actualizePosition();
         }
     }
 
@@ -90,11 +123,20 @@ public class Field extends JPanel implements ActionListener {
     }
 
     public String getGameStatusMessage() {
-        String propulsion = "Propulsion: Px:"+movableObject.getPx()+" Py:"+movableObject.getPy();
-        String vitesse = "Vitesse: Vx:"+movableObject.getVx()+" Vy:"+movableObject.getVy();
-        String position = "Position: x:"+movableObject.getX()+" y:"+movableObject.getY();
+        switch(scenario){
+            case 1 :
+                String propulsion = "Propulsion: Px:"+movableObject.getPx()+" Py:"+movableObject.getPy();
+                String vitesse = "Vitesse: Vx:"+movableObject.getVx()+" Vy:"+movableObject.getVy();
+                String position = "Position: x:"+movableObject.getX()+" y:"+movableObject.getY();
 
-        return propulsion+" "+vitesse+" "+position;
+                return propulsion+" "+vitesse+" "+position;
+            case 2 :
+                String theta = "Angle d'observation : "+180*observer.getThetaObs(movableObject.getX(),movableObject.getY())/Math.PI;
+                return theta;
+
+        }
+        return "";
+
     }
 
     public static double getG() {

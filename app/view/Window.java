@@ -16,13 +16,18 @@ public class Window extends JFrame implements KeyListener, ActionListener {
     private Timer timerField;
     private Timer timerInfos;
 
+    private boolean stop;
+
     public Window() {
         super();
+
+        this.stop = false;
+
         this.setLayout(new BorderLayout());
         this.setSize(800,600);
         this.setResizable(false);
 
-        field = new Field();
+        field = new Field(2);
         infoPanel = new InfoPanel();
         this.add(infoPanel, BorderLayout.NORTH);
         this.add(field, BorderLayout.CENTER);
@@ -31,6 +36,8 @@ public class Window extends JFrame implements KeyListener, ActionListener {
 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
+
+
     }
 
     public void keyTyped(KeyEvent keyEvent){
@@ -50,6 +57,13 @@ public class Window extends JFrame implements KeyListener, ActionListener {
             case ' ':
                 field.restart();
                 break;
+            case 'p':
+                if(stop)
+                    start();
+                else
+                    stop();
+                break;
+
         }
     }
 
@@ -65,14 +79,19 @@ public class Window extends JFrame implements KeyListener, ActionListener {
     }
 
     public void start() {
-        timerField = new Timer((int) (Field.Te*1000), field);
+        if(timerField == null)
+            timerField = new Timer((int) (Field.Te*1000), field);
         timerField.start();
-        timerInfos = new Timer(1, this);
+        if(timerInfos == null)
+            timerInfos = new Timer((int) (Field.Te*1000), this);
         timerInfos.start();
+        stop = false;
     }
 
     public void stop() {
         timerField.stop();
+        timerInfos.stop();
+        stop = true;
     }
 
     @Override

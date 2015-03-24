@@ -78,6 +78,14 @@ public class MovableObject {
     public void setPy(double npy){
         this.py = npy;
     }
+
+    public void setVx(double nvx){
+        this.vx = nvx;
+    }
+
+    public void setVy(double nvy){
+        this.vy = nvy;
+    }
     
     public void actualizeSpeed(){
         vx += ( px / m ) * Field.Te;
@@ -166,12 +174,12 @@ public class MovableObject {
     }
 
     public void dessine(Graphics g) {
-        g.drawRect(this.getX(), this.getY(), SIZE, SIZE);
+        g.drawRect(this.getX()-SIZE/2, this.getY()-SIZE/2, SIZE, SIZE);
 
         // propulsion gauche/droite
-        g.drawLine(this.getX()+SIZE/2, this.getY()+SIZE/2, (int) (this.getX()+SIZE/2-px), this.getY()+SIZE/2);
+        g.drawLine(this.getX(), this.getY(), (int) (this.getX()-px), this.getY());
         // propulsion haut/bas
-        g.drawLine(this.getX()+SIZE/2, this.getY()+SIZE/2, this.getX()+SIZE/2, (int) (this.getY()+SIZE/2-py));
+        g.drawLine(this.getX(), this.getY(), this.getX(), (int) (this.getY()-py));
     }
 
     public void testCollision(Field field) {
