@@ -1,5 +1,7 @@
 package app.view;
 
+import app.model.Scenario;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -27,7 +29,7 @@ public class Window extends JFrame implements KeyListener, ActionListener {
         this.setSize(800,600);
         this.setResizable(false);
 
-        field = new Field(2);
+        field = new Field(Scenario.ERP);
         infoPanel = new InfoPanel();
         this.add(infoPanel, BorderLayout.NORTH);
         this.add(field, BorderLayout.CENTER);
@@ -36,8 +38,6 @@ public class Window extends JFrame implements KeyListener, ActionListener {
 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
-
-
     }
 
     public void keyTyped(KeyEvent keyEvent){

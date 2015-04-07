@@ -1,9 +1,6 @@
 package app.view;
 
-import app.model.Command;
-import app.model.MovableObject;
-import app.model.Observer;
-import app.model.StaticObject;
+import app.model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +15,7 @@ public class Field extends JPanel implements ActionListener {
     private MovableObject movableObject;
     private Observer observer;
     private static final double MASS = 1;
-    private int scenario;
+    private Scenario scenario;
 
     // Période d'échantillonage en secondes
     public static final double Te = 0.04;
@@ -26,17 +23,10 @@ public class Field extends JPanel implements ActionListener {
     // Propriètés physiques du monde
     private static double G;
 
-    public Field(int scenario) {
+    public Field(Scenario scenario) {
         this.scenario = scenario;
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        switch(scenario){
-            case 1 :
-                init();
-                break;
-            case 2 :
-                initERP();
-                break;
-        }
+        init(scenario);
         this.setVisible(true);
     }
 
@@ -48,7 +38,7 @@ public class Field extends JPanel implements ActionListener {
 
     }
 
-    private void init(){
+    private void initGAME(){
 
         movableObject = new MovableObject(MASS, 400, 0);
         movableObject.setCommand(new Command(600,200,0.0514048,0.1265232));
@@ -66,6 +56,17 @@ public class Field extends JPanel implements ActionListener {
         staticObjects[7] = new StaticObject(0, 0, 40, 200);
 
         G = -9.81;
+    }
+
+    private void init(Scenario scenario) {
+        switch(scenario){
+            case GAME:
+                initGAME();
+                break;
+            case ERP:
+                initERP();
+                break;
+        }
     }
 
     @Override
@@ -124,13 +125,13 @@ public class Field extends JPanel implements ActionListener {
 
     public String getGameStatusMessage() {
         switch(scenario){
-            case 1 :
+            case GAME:
                 String propulsion = "Propulsion: Px:"+movableObject.getPx()+" Py:"+movableObject.getPy();
                 String vitesse = "Vitesse: Vx:"+movableObject.getVx()+" Vy:"+movableObject.getVy();
                 String position = "Position: x:"+movableObject.getX()+" y:"+movableObject.getY();
 
                 return propulsion+" "+vitesse+" "+position;
-            case 2 :
+            case ERP:
                 String theta = "Angle d'observation : "+180*observer.getThetaObs(movableObject.getX(),movableObject.getY())/Math.PI;
                 return theta;
 
@@ -150,6 +151,6 @@ public class Field extends JPanel implements ActionListener {
     }
 
     public void restart() {
-        movableObject.respawn();
+        init(scenario);
     }
 }
