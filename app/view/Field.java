@@ -34,8 +34,7 @@ public class Field extends JPanel implements ActionListener {
         G = 0;
         movableObject = new MovableObject(MASS, 0, 200);
         movableObject.setVx(20);
-        observer = new Observer(200,200,100,0,3);
-
+        observer = new Observer(200,200,100,0,0.5);
     }
 
     private void initGAME(){
@@ -129,15 +128,14 @@ public class Field extends JPanel implements ActionListener {
                 String propulsion = "Propulsion: Px:"+movableObject.getPx()+" Py:"+movableObject.getPy();
                 String vitesse = "Vitesse: Vx:"+movableObject.getVx()+" Vy:"+movableObject.getVy();
                 String position = "Position: x:"+movableObject.getX()+" y:"+movableObject.getY();
-
                 return propulsion+" "+vitesse+" "+position;
             case ERP:
-                String theta = "Angle d'observation : "+180*observer.getThetaObs(movableObject.getX(),movableObject.getY())/Math.PI;
-                return theta;
-
+                double thetaDegrees = 180*observer.getThetaObs(movableObject.getX(),movableObject.getY())/Math.PI;
+                String theta = "Angle d'observation: "+thetaDegrees;
+                String positionCalc = "Position estimée: "+observer.getEstimation();
+                return theta+" "+positionCalc;
         }
         return "";
-
     }
 
     public static double getG() {

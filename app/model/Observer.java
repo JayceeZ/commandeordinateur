@@ -1,5 +1,6 @@
 package app.model;
 
+import app.Solver;
 import app.view.Field;
 
 import java.awt.*;
@@ -24,7 +25,10 @@ public class Observer {
     private double t;
 
     private double R;
-    private int y;
+
+    private double previousTheta;
+
+    private Solver solver;
 
     public Observer(double x0, double y0,double R, double theta, double w){
         this.x0 = x0;
@@ -33,6 +37,7 @@ public class Observer {
         this.theta0 = theta;
         this.w = w;
         this.t = 0;
+        this.solver = new Solver();
     }
 
     public void actualizePosition(){
@@ -41,7 +46,8 @@ public class Observer {
         this.t += Field.Te;
     }
 
-    public double getThetaObs(double xm, double ym){
+    public double getThetaObs(double xm, double ym) {
+        previousTheta = Math.atan2(ym-yp,xm-xp)+Math.PI/2;
         return Math.atan2(ym-yp,xm-xp)+Math.PI/2;
     }
 
@@ -55,5 +61,14 @@ public class Observer {
 
     public int getX() {
         return (int) xp;
+    }
+
+    public String getEstimation() {
+        String estimation = "Can't say !";
+        if(previousTheta != 0) {
+            double[][] valeurs = solver.getPosition(xp, yp, previousTheta, getThetaObs(xp, yp)).getData();
+            estimation = "x: "+valeurs[0][0]+" y: "+valeurs[0][1];
+        }
+        return estimation.toString();
     }
 }
