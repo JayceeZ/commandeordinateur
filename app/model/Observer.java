@@ -26,9 +26,8 @@ public class Observer {
 
     private double R;
 
-    private double previousTheta;
-
     private Solver solver;
+    private double theta;
 
     public Observer(double x0, double y0,double R, double theta, double w){
         this.x0 = x0;
@@ -47,8 +46,8 @@ public class Observer {
     }
 
     public double getThetaObs(double xm, double ym) {
-        previousTheta = Math.atan2(ym-yp,xm-xp)+Math.PI/2;
-        return Math.atan2(ym-yp,xm-xp)+Math.PI/2;
+        theta = Math.atan2(ym-yp,xm-xp);
+        return theta+Math.PI/2;
     }
 
     public void dessine(Graphics g){
@@ -64,11 +63,7 @@ public class Observer {
     }
 
     public String getEstimation() {
-        String estimation = "Can't say !";
-        if(previousTheta != 0) {
-            double[][] valeurs = solver.getPosition(xp, yp, previousTheta, getThetaObs(xp, yp)).getData();
-            estimation = "x: "+valeurs[0][0]+" y: "+valeurs[0][1];
-        }
-        return estimation.toString();
+        double[] solution = solver.getPosition(xp, yp, theta, t);
+        return "x:" + solution[0] + " y:" + solution[1] + " vx: " + solution[2] + " vy:" + solution[3];
     }
 }

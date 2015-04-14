@@ -7,24 +7,39 @@ import org.apache.commons.math3.linear.RealMatrix;
  * Created by isoard on 07/04/15.
  */
 public class Solver {
+    int count;
+
     RealMatrix gauche;
     RealMatrix droite;
     RealMatrix solution;
 
+    double[][] matrixDroiteData;
+    double[][] matrixGaucheData;
+
     public Solver() {
-        gauche = MatrixUtils.createRealIdentityMatrix(2);
+        gauche = MatrixUtils.createRealIdentityMatrix(4);
+        matrixGaucheData = new double[4][4];
+        matrixDroiteData = new double[4][1];
+        count = 0;
     }
 
-    public RealMatrix getPosition(double xp, double yp, double theta0, double theta1) {
-        setMatrixRight(xp, yp, theta0, theta1);
-        setMatrixLeft(theta0, theta1);
+    public double[] getPosition(double xp, double yp, double theta, double t) {
+        setMatrixLeft(theta, t);
+        setMatrixRight(xp, yp, theta);
+        if(count < 4) {
+            double[] result = {0, 0, 0, 0};
+            count++;
+            return result;
+        }
         invertMatrixLeft();
         multiplyRightLeft();
-        return solution;
+        double[] result = { solution.getEntry(0,0)+solution.getEntry(1,0)*t, solution.getEntry(2,0)+solution.getEntry(3,0)*t,
+                            solution.getEntry(1,0), solution.getEntry(3,0) };
+        return result;
     }
 
     private void multiplyRightLeft() {
-        solution = droite.multiply(gauche);
+        solution = gauche.multiply(droite);
     }
 
     private void invertMatrixLeft() {
@@ -32,13 +47,25 @@ public class Solver {
         gauche = MatrixUtils.inverse(gauche);
     }
 
-    private void setMatrixLeft(double theta0, double theta1) {
-        double[][] matrixData = { {Math.sin(theta0), -Math.cos(theta0)} , {Math.sin(theta1), -Math.cos(theta1)} };
-        gauche = MatrixUtils.createRealMatrix(matrixData);
+    private void setMatrixLeft(double theta, double t) {
+        double[][] matrixData = {
+                {matrixGaucheData[1][0], matrixGaucheData[1][1], matrixGaucheData[1][2], matrixGaucheData[1][3]} ,
+                {matrixGaucheData[2][0], matrixGaucheData[2][1], matrixGaucheData[2][2], matrixGaucheData[2][3]} ,
+                {matrixGaucheData[3][0], matrixGaucheData[3][1], matrixGaucheData[3][2], matrixGaucheData[3][3]} ,
+                {Math.sin(theta), t*Math.sin(theta), -Math.cos(theta), t*Math.cos(theta)}
+        };
+        matrixGaucheData = matrixData;
+        gauche = MatrixUtils.createRealMatrix(matrixGaucheData);
     }
 
-    private void setMatrixRight(double xp, double yp, double theta0, double theta1) {
-        double[][] matrixData = { {Math.sin(theta0)*xp-Math.cos(theta0)*yp, Math.sin(theta1)*xp-Math.cos(theta1)*yp} };
-        droite = MatrixUtils.createRealMatrix(matrixData);
+    private void setMatrixRight(double xp, double yp, double theta) {
+        double[][] matrixData = {
+                {matrixDroiteData[1][0]},
+                {matrixDroiteData[2][0]},
+                {matrixDroiteData[3][0]},
+                {Math.sin(theta)*xp-Math.cos(theta)*yp}
+    };
+        matrixDroiteData = matrixData;
+        droite = MatrixUtils.createRealMatrix(matrixDroiteData);
     }
 }
