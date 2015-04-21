@@ -22,6 +22,7 @@ public class Field extends JPanel implements ActionListener {
 
     // Propriètés physiques du monde
     private static double G;
+    private double thetaDegrees;
 
     public Field(Scenario scenario) {
         this.scenario = scenario;
@@ -33,7 +34,7 @@ public class Field extends JPanel implements ActionListener {
     private void initERP(){
         G = 0;
         movableObject = new MovableObject(MASS, 0, 200);
-        movableObject.setVx(20);
+        //movableObject.setVx(0);
         observer = new Observer(200,200,100,0,0.5);
     }
 
@@ -111,6 +112,7 @@ public class Field extends JPanel implements ActionListener {
 
         if(observer != null){
             observer.actualizePosition();
+            thetaDegrees = 180*observer.getThetaObs(movableObject.getX(),movableObject.getY())/Math.PI;
         }
     }
 
@@ -130,7 +132,6 @@ public class Field extends JPanel implements ActionListener {
                 String position = "Position: x:"+movableObject.getX()+" y:"+movableObject.getY();
                 return propulsion+" "+vitesse+" "+position;
             case ERP:
-                double thetaDegrees = 180*observer.getThetaObs(movableObject.getX(),movableObject.getY())/Math.PI;
                 String theta = "Angle d'observation: "+thetaDegrees;
                 String positionCalc = "Position estimée: "+observer.getEstimation();
                 return theta+" "+positionCalc;

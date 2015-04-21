@@ -52,7 +52,7 @@ public class Solver {
                 {matrixGaucheData[1][0], matrixGaucheData[1][1], matrixGaucheData[1][2], matrixGaucheData[1][3]} ,
                 {matrixGaucheData[2][0], matrixGaucheData[2][1], matrixGaucheData[2][2], matrixGaucheData[2][3]} ,
                 {matrixGaucheData[3][0], matrixGaucheData[3][1], matrixGaucheData[3][2], matrixGaucheData[3][3]} ,
-                {Math.sin(theta), t*Math.sin(theta), -Math.cos(theta), t*Math.cos(theta)}
+                {Math.sin(theta), t*Math.sin(theta), -Math.cos(theta), -t*Math.cos(theta)}
         };
         matrixGaucheData = matrixData;
         gauche = MatrixUtils.createRealMatrix(matrixGaucheData);

@@ -29,6 +29,8 @@ public class Observer {
     private Solver solver;
     private double theta;
 
+    private double[] solution;
+
     public Observer(double x0, double y0,double R, double theta, double w){
         this.x0 = x0;
         this.y0 = y0;
@@ -43,6 +45,7 @@ public class Observer {
         this.xp = R*Math.cos(w * t + theta0) + x0;
         this.yp = R*Math.sin(w * t + theta0) + y0;
         this.t += Field.Te;
+        solution = solver.getPosition(xp, yp, theta, t);
     }
 
     public double getThetaObs(double xm, double ym) {
@@ -63,7 +66,6 @@ public class Observer {
     }
 
     public String getEstimation() {
-        double[] solution = solver.getPosition(xp, yp, theta, t);
         return "x:" + solution[0] + " y:" + solution[1] + " vx: " + solution[2] + " vy:" + solution[3];
     }
 }
