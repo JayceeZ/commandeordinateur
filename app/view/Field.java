@@ -34,7 +34,7 @@ public class Field extends JPanel implements ActionListener {
     private void initERP(){
         G = 0;
         movableObject = new MovableObject(MASS, 0, 200);
-        //movableObject.setVx(0);
+        movableObject.setVx(20);
         observer = new Observer(200,200,100,0,0.5);
     }
 
@@ -80,8 +80,10 @@ public class Field extends JPanel implements ActionListener {
 
         // Dessine le vaisseau
         movableObject.dessine(g);
+        g.drawString("("+movableObject.getX()+","+ movableObject.getY()+")", movableObject.getX(), movableObject.getY());
         if(observer != null){
             observer.dessine(g);
+            g.drawString("("+observer.getX()+","+ observer.getY()+")", observer.getX(), observer.getY());
             g.drawLine(movableObject.getX(), movableObject.getY(), observer.getX(), observer.getY());
             g.drawLine(observer.getX(),observer.getY(),observer.getX(),observer.getY()-100);
         }

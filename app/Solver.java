@@ -38,6 +38,16 @@ public class Solver {
         return result;
     }
 
+    private void displayMatrix(RealMatrix matrice) {
+        for(int i = 0; i < matrice.getRowDimension(); i++) {
+            System.out.print("[");
+            for(int j=0; j < matrice.getColumnDimension(); j++) {
+                System.out.print(matrice.getEntry(i, j) + ",");
+            }
+            System.out.println("]");
+        }
+    }
+
     private void multiplyRightLeft() {
         solution = gauche.multiply(droite);
     }

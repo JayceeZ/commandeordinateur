@@ -30,6 +30,7 @@ public class Observer {
     private double theta;
 
     private double[] solution;
+    private int count;
 
     public Observer(double x0, double y0,double R, double theta, double w){
         this.x0 = x0;
@@ -39,13 +40,19 @@ public class Observer {
         this.w = w;
         this.t = 0;
         this.solver = new Solver();
+        this.count = 0;
+        solution = new double[4];
     }
 
     public void actualizePosition(){
+        count++;
         this.xp = R*Math.cos(w * t + theta0) + x0;
         this.yp = R*Math.sin(w * t + theta0) + y0;
         this.t += Field.Te;
-        solution = solver.getPosition(xp, yp, theta, t);
+        if(count == 5) {
+            count = 0;
+            solution = solver.getPosition(xp, yp, theta, t);
+        }
     }
 
     public double getThetaObs(double xm, double ym) {
@@ -66,6 +73,8 @@ public class Observer {
     }
 
     public String getEstimation() {
-        return "x:" + solution[0] + " y:" + solution[1] + " vx: " + solution[2] + " vy:" + solution[3];
+        String estimation = "x0:" + solution[0] + " y0:" + solution[1] + " vx: " + solution[2] + " vy:" + solution[3];
+        System.out.println(estimation);
+        return estimation;
     }
 }

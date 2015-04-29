@@ -76,6 +76,7 @@ public class Window extends JFrame implements KeyListener, ActionListener {
     }
     
     public void actualize(){
+        infoPanel.display(field.getGameStatusMessage());
     }
 
     public void start() {
