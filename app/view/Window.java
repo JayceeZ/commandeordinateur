@@ -14,7 +14,7 @@ public class Window extends JFrame implements KeyListener, ActionListener {
     private final Field field;
 
     // Pas de puissance des réacteurs
-    private static final double PUSH_POWER = 1;
+    private static final double PUSH_POWER = 2;
     private Timer timerField;
     private Timer timerInfos;
 
@@ -26,47 +26,49 @@ public class Window extends JFrame implements KeyListener, ActionListener {
         this.stop = false;
 
         this.setLayout(new BorderLayout());
-        this.setSize(800,600);
+        this.setSize(800, 600);
         this.setResizable(false);
 
-        field = new Field(Scenario.GAME);
-        infoPanel = new InfoPanel();
-        this.add(infoPanel, BorderLayout.NORTH);
+        field = new Field(Scenario.GAME, new Dimension(600, 600));
+        infoPanel = new InfoPanel(new Dimension(200, 600));
+
         this.add(field, BorderLayout.CENTER);
-        
-        addKeyListener(this);
+        this.add(infoPanel, BorderLayout.EAST);
+
+        this.addKeyListener(this);
 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
+        //this.pack();
     }
 
-    public void keyTyped(KeyEvent keyEvent){
-        switch(keyEvent.getKeyChar()){
-            case KeyEvent.VK_ESCAPE :
+    @Override
+    public void keyTyped(KeyEvent keyEvent) {
+        switch (keyEvent.getKeyChar()) {
+            case KeyEvent.VK_ESCAPE:
                 System.exit(0);
                 break;
-            case 's' :
+            case 's':
                 field.changePy(-PUSH_POWER);
                 break;
-            case 'z' :
+            case 'z':
                 field.changePy(PUSH_POWER);
                 break;
-            case 'd' :
+            case 'd':
                 field.changePx(-PUSH_POWER);
                 break;
-            case 'q' :
+            case 'q':
                 field.changePx(PUSH_POWER);
                 break;
             case ' ':
                 field.restart();
                 break;
             case 'p':
-                if(stop)
+                if (stop)
                     start();
                 else
                     stop();
                 break;
-
         }
     }
 
@@ -77,17 +79,17 @@ public class Window extends JFrame implements KeyListener, ActionListener {
     public void keyReleased(KeyEvent e) {
         //Do nothing
     }
-    
-    public void actualize(){
+
+    public void actualize() {
         infoPanel.display(field.getGameStatusMessage());
     }
 
     public void start() {
-        if(timerField == null)
-            timerField = new Timer((int) (Field.Te*1000), field);
+        if (timerField == null)
+            timerField = new Timer((int) (Field.Te * 1000), field);
         timerField.start();
-        if(timerInfos == null)
-            timerInfos = new Timer((int) (Field.Te*1000), this);
+        if (timerInfos == null)
+            timerInfos = new Timer((int) (Field.Te * 1000), this);
         timerInfos.start();
         stop = false;
     }

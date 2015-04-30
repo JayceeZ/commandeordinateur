@@ -12,6 +12,7 @@ import java.awt.*;
 
 /**
  * Représente l'objet contrôlable
+ *
  * @author Alex
  */
 public class MovableObject {
@@ -46,7 +47,7 @@ public class MovableObject {
     private Command command;
     private boolean landed;
 
-    public MovableObject(double m, int xi, int yi){
+    public MovableObject(double m, int xi, int yi) {
 
         // on définie la position initiale
         this.initX = xi;
@@ -64,41 +65,41 @@ public class MovableObject {
         this.commandOn = false;
         this.command = new Command();
     }
-    
-    public void changePx(double npx){
+
+    public void changePx(double npx) {
         this.px += npx;
     }
-    
-    public void changePy(double npy){
+
+    public void changePy(double npy) {
         this.py += npy;
     }
 
-    public void setPx(double npx){
+    public void setPx(double npx) {
         this.px = npx;
     }
 
-    public void setPy(double npy){
+    public void setPy(double npy) {
         this.py = npy;
     }
 
-    public void setVx(double nvx){
+    public void setVx(double nvx) {
         this.vx = nvx;
     }
 
-    public void setVy(double nvy){
+    public void setVy(double nvy) {
         this.vy = nvy;
     }
-    
-    public void actualizeSpeed(){
-        if(!landed) {
+
+    public void actualizeSpeed() {
+        if (!landed) {
             vx += (px / m) * Field.Te;
             vy += ((py / m) - Field.getG()) * Field.Te;
         } else {
-           this.stop();
+            this.stop();
         }
     }
-    
-    public void actualizePosition(){
+
+    public void actualizePosition() {
         x += vx * Field.Te;
         y += vy * Field.Te;
     }
@@ -132,6 +133,7 @@ public class MovableObject {
 
     /**
      * Donne la vitesse horizontale de l'objet
+     *
      * @return
      */
     public double getVx() {
@@ -140,6 +142,7 @@ public class MovableObject {
 
     /**
      * Donne la vitesse verticale de l'objet
+     *
      * @return
      */
     public double getVy() {
@@ -148,6 +151,7 @@ public class MovableObject {
 
     /**
      * Donne la propulsion horizontale de l'objet
+     *
      * @return
      */
     public double getPx() {
@@ -156,61 +160,62 @@ public class MovableObject {
 
     /**
      * Donne la propulsion verticale de l'objet
+     *
      * @return
      */
     public double getPy() {
         return py;
     }
 
-    public void setCommand(Command c){
+    public void setCommand(Command c) {
         this.command = c;
     }
 
-    public Command getCommand(){
+    public Command getCommand() {
         return command;
     }
 
-    public void setCommandOn(boolean c){
+    public void setCommandOn(boolean c) {
         this.commandOn = c;
     }
 
-    public boolean isCommandOn(){
+    public boolean isCommandOn() {
         return commandOn;
     }
 
     public void dessine(Graphics g) {
-        g.drawRect(this.getX()-SIZE/2, this.getY()-SIZE/2, SIZE, SIZE);
+        g.drawRect(this.getX() - SIZE / 2, this.getY() - SIZE / 2, SIZE, SIZE);
 
         // propulsion gauche/droite
-        g.drawLine(this.getX(), this.getY(), (int) (this.getX()-px), this.getY());
+        g.drawLine(this.getX(), this.getY(), (int) (this.getX() - px), this.getY());
         // propulsion haut/bas
-        g.drawLine(this.getX(), this.getY(), this.getX(), (int) (this.getY()-py));
+        g.drawLine(this.getX(), this.getY(), this.getX(), (int) (this.getY() - py));
     }
 
     public void testCollision(Field field) {
-        int x = (int) this.x-SIZE/2;
-        int y = (int) this.y-SIZE/2;
+        int x = (int) this.x - SIZE / 2;
+        int y = (int) this.y - SIZE / 2;
 
-        if(field.testCollisionBord(x,y)
-                || field.testCollisionBord(x+SIZE, y)
-                || field.testCollisionBord(x,y+SIZE)
-                || field.testCollisionBord(x+SIZE, y+SIZE)) {
+        if (field.testCollisionBord(x, y)
+                || field.testCollisionBord(x + SIZE, y)
+                || field.testCollisionBord(x, y + SIZE)
+                || field.testCollisionBord(x + SIZE, y + SIZE)) {
             this.respawn();
         }
     }
 
     public void testCollision(StaticObject staticObject) {
-        int x = (int) this.x-SIZE/2;
-        int y = (int) this.y-SIZE/2;
+        int x = (int) this.x - SIZE / 2;
+        int y = (int) this.y - SIZE / 2;
 
-        if(staticObject.appartient(x, y)
+        if (staticObject.appartient(x, y)
                 || staticObject.appartient(x + SIZE, y)
                 || staticObject.appartient(x, y + SIZE)
                 || staticObject.appartient(x + SIZE, y + SIZE)) {
             System.out.println("Collision à (" + x + "," + y + ") avec " + staticObject + "\n");
             staticObject.colorify(Color.RED);
 
-            if(staticObject.appartient(x, y + SIZE)
+            if (staticObject.appartient(x, y + SIZE)
                     && staticObject.appartient(x + SIZE, y + SIZE)) { // si c'est la partie inférieure de l'objet qui entre en collision
                 if (this.vy > DEADLYSPEED) { // si la vitesse verticale est meurtrière
                     this.respawn();
@@ -224,7 +229,7 @@ public class MovableObject {
     }
 
     private void land(StaticObject staticObject) {
-        this.y = staticObject.getTopY()-SIZE/2;
+        this.y = staticObject.getTopY() - SIZE / 2;
         this.landed = true;
     }
 }

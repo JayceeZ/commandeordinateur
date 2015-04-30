@@ -9,14 +9,14 @@ public class Command {
     private double kx;
     private double ky;
 
-    public Command(int x, int y, double k1, double k2){
+    public Command(int x, int y, double k1, double k2) {
         this.xf = x;
         this.yf = y;
         this.kx = k1;
         this.ky = k2;
     }
 
-    public Command(){
+    public Command() {
         this.xf = 0;
         this.yf = 0;
         this.kx = 0;

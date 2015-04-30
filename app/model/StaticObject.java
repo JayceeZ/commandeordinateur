@@ -21,13 +21,14 @@ public class StaticObject {
 
     /**
      * Test si le point (x, y) appartient à l'objet statique
+     *
      * @param x
      * @param y
      * @return
      */
     public boolean appartient(int x, int y) {
-        if(x > x1 && x < x2) {
-            if(y > y1 && y < y2) {
+        if (x > x1 && x < x2) {
+            if (y > y1 && y < y2) {
                 return true;
             }
         }
@@ -36,19 +37,19 @@ public class StaticObject {
 
     public void dessine(Graphics g) {
         this.graphic = g;
-        g.drawRect(x1, y1, x2-x1, y2-y1);
+        g.drawRect(x1, y1, x2 - x1, y2 - y1);
         g.drawLine(x1, y1, x2, y2);
         g.drawLine(x1, y2, x2, y1);
     }
 
     public void colorify(Color color) {
         graphic.setColor(color);
-        graphic.drawRect(x1, y1, x2-x1, y2-y1);
+        graphic.drawRect(x1, y1, x2 - x1, y2 - y1);
     }
 
     @Override
     public String toString() {
-        return "StaticObject\nCovered Zone inside ("+x1+","+y1+") ("+x2+","+y2+")";
+        return "StaticObject\nCovered Zone inside (" + x1 + "," + y1 + ") (" + x2 + "," + y2 + ")";
     }
 
     public double getTopY() {

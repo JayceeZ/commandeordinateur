@@ -7,7 +7,6 @@ package app;/*
 import app.view.Window;
 
 /**
- *
  * @author Alex
  */
 public class Main {
@@ -19,5 +18,5 @@ public class Main {
         Window window = new Window();
         window.start();
     }
-    
+
 }

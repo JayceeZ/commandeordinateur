@@ -32,7 +32,7 @@ public class Observer {
     private double[] solution;
     private int count;
 
-    public Observer(double x0, double y0,double R, double theta, double w){
+    public Observer(double x0, double y0, double R, double theta, double w) {
         this.x0 = x0;
         this.y0 = y0;
         this.R = R;
@@ -44,24 +44,24 @@ public class Observer {
         solution = new double[4];
     }
 
-    public void actualizePosition(){
+    public void actualizePosition() {
         count++;
-        this.xp = R*Math.cos(w * t + theta0) + x0;
-        this.yp = R*Math.sin(w * t + theta0) + y0;
+        this.xp = R * Math.cos(w * t + theta0) + x0;
+        this.yp = R * Math.sin(w * t + theta0) + y0;
         this.t += Field.Te;
-        if(count == 5) {
+        if (count == 5) {
             count = 0;
             solution = solver.getPosition(xp, yp, theta, t);
         }
     }
 
     public double getThetaObs(double xm, double ym) {
-        theta = Math.atan2(ym-yp,xm-xp);
-        return theta+Math.PI/2;
+        theta = Math.atan2(ym - yp, xm - xp);
+        return theta + Math.PI / 2;
     }
 
-    public void dessine(Graphics g){
-        g.drawOval((int) xp-SIZE_OBJECT/2, (int) yp-SIZE_OBJECT/2,SIZE_OBJECT,SIZE_OBJECT);
+    public void dessine(Graphics g) {
+        g.drawOval((int) xp - SIZE_OBJECT / 2, (int) yp - SIZE_OBJECT / 2, SIZE_OBJECT, SIZE_OBJECT);
     }
 
     public int getY() {
