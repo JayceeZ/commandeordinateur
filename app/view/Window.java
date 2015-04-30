@@ -63,6 +63,9 @@ public class Window extends JFrame implements KeyListener, ActionListener {
             case 'q':
                 field.changePx(PUSH_POWER);
                 break;
+            case 'r':
+                field.changeAutoPilot();
+                break;
             case ' ':
                 field.restart();
                 break;

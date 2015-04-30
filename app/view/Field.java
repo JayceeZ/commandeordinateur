@@ -24,10 +24,12 @@ public class Field extends JPanel implements ActionListener {
     private static double G;
     private double thetaDegrees;
     private String gameStatus;
+    private boolean autopilot;
 
     public Field(Scenario scenario, Dimension dimension) {
         this.scenario = scenario;
         this.gameStatus = "Field loaded, waiting for simulation to start.";
+        this.autopilot = false;
 
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         init(scenario);
@@ -49,8 +51,10 @@ public class Field extends JPanel implements ActionListener {
         this.gameStatus = "Mode: Jeu";
 
         movableObject = new MovableObject(MASS, 80, 20);
-        movableObject.setCommand(new Command(600, 200, 0.0514048, 0.1265232));
-        //movableObject.setCommandOn(true);
+
+        // commande par retour d'état
+        movableObject.setCommand(new Command(360, 90, 0.5255541, 1.0252537));
+        movableObject.setCommandOn(autopilot);
 
         staticObjects = buildLevel();
 
@@ -135,8 +139,10 @@ public class Field extends JPanel implements ActionListener {
             thetaDegrees = 180 * observer.getThetaObs(movableObject.getX(), movableObject.getY()) / Math.PI;
         }
 
-        if(movableObject.isLanded() && movableObject.getLandedStaticObject().isDestination()) {
+        if (movableObject.isLanded() && movableObject.getLandedStaticObject().isDestination()) {
             gameStatus = "Vous êtes arrivé à destination !";
+        } else if (autopilot) {
+            gameStatus = "Autopilotage de l'appareil activé (Commande par retour d'état)";
         } else {
             gameStatus = "Courage, vous pouvez y arriver ! (ESPACE pour recommencer)";
         }
@@ -185,5 +191,12 @@ public class Field extends JPanel implements ActionListener {
 
     public void restart() {
         init(scenario);
+    }
+
+    public void changeAutoPilot() {
+        if(scenario.equals(Scenario.GAME)) {
+            autopilot = !autopilot;
+        }
+        this.restart();
     }
 }
