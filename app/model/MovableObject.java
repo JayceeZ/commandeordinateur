@@ -17,6 +17,7 @@ import java.awt.*;
 public class MovableObject {
     // Taille de l'objet
     private static final int SIZE = 20;
+    private static final double DEADLYSPEED = 15;
 
     // Positions initiales
     private int initX;
@@ -43,7 +44,8 @@ public class MovableObject {
     // Commande automatique
     private boolean commandOn;
     private Command command;
-    
+    private boolean landed;
+
     public MovableObject(double m, int xi, int yi){
 
         // on définie la position initiale
@@ -88,8 +90,12 @@ public class MovableObject {
     }
     
     public void actualizeSpeed(){
-        vx += ( px / m ) * Field.Te;
-        vy += ((py / m) - Field.getG()) * Field.Te;
+        if(!landed) {
+            vx += (px / m) * Field.Te;
+            vy += ((py / m) - Field.getG()) * Field.Te;
+        } else {
+           this.stop();
+        }
     }
     
     public void actualizePosition(){
@@ -111,7 +117,8 @@ public class MovableObject {
     public void stop() {
         px = 0;
         py = 0;
-        actualizeSpeed();
+        vx = 0;
+        vy = 0;
     }
 
     /**
@@ -121,8 +128,6 @@ public class MovableObject {
         stop();
         x = initX;
         y = initY;
-        vx = 0;
-        vy = 0;
     }
 
     /**
@@ -183,10 +188,13 @@ public class MovableObject {
     }
 
     public void testCollision(Field field) {
-        int x = (int) this.x;
-        int y = (int) this.y;
+        int x = (int) this.x-SIZE/2;
+        int y = (int) this.y-SIZE/2;
 
-        if(field.testCollisionBord(x,y) || field.testCollisionBord(x+SIZE, y) || field.testCollisionBord(x,y+SIZE) || field.testCollisionBord(x+SIZE, y+SIZE)) {
+        if(field.testCollisionBord(x,y)
+                || field.testCollisionBord(x+SIZE, y)
+                || field.testCollisionBord(x,y+SIZE)
+                || field.testCollisionBord(x+SIZE, y+SIZE)) {
             this.respawn();
         }
     }
@@ -199,9 +207,24 @@ public class MovableObject {
                 || staticObject.appartient(x + SIZE, y)
                 || staticObject.appartient(x, y + SIZE)
                 || staticObject.appartient(x + SIZE, y + SIZE)) {
-            System.out.println("Collision à ("+x+","+y+") avec "+staticObject+"\n");
+            System.out.println("Collision à (" + x + "," + y + ") avec " + staticObject + "\n");
             staticObject.colorify(Color.RED);
-            this.respawn();
+
+            if(staticObject.appartient(x, y + SIZE)
+                    && staticObject.appartient(x + SIZE, y + SIZE)) { // si c'est la partie inférieure de l'objet qui entre en collision
+                if (this.vy > DEADLYSPEED) { // si la vitesse verticale est meurtrière
+                    this.respawn();
+                } else { // sinon on est posé
+                    this.land(staticObject);
+                }
+            } else {
+                this.respawn();
+            }
         }
+    }
+
+    private void land(StaticObject staticObject) {
+        this.y = staticObject.getTopY()-SIZE/2;
+        this.landed = true;
     }
 }

@@ -33,20 +33,35 @@ public class Field extends JPanel implements ActionListener {
 
     private void initERP(){
         G = 0;
-        movableObject = new MovableObject(MASS, 0, 200);
+        movableObject = new MovableObject(MASS, 20, 200);
         movableObject.setVx(20);
         observer = new Observer(200,200,100,0,0.5);
     }
 
     private void initGAME(){
 
-        movableObject = new MovableObject(MASS, 400, 0);
+        movableObject = new MovableObject(MASS, 400, 20);
         movableObject.setCommand(new Command(600,200,0.0514048,0.1265232));
         //movableObject.setCommandOn(true);
 
-        staticObjects = StaticObject.buildLevel();
+        staticObjects = buildLevel();
 
         G = -9.81;
+    }
+
+    private static StaticObject[] buildLevel() {
+        StaticObject[] staticObjects = new StaticObject[8];
+
+        staticObjects[0] = new StaticObject(0, 0, 40, 200);
+        staticObjects[1] = new StaticObject(100, 100, 200, 200);
+        staticObjects[2] = new StaticObject(240, 100, 400, 140);
+        staticObjects[3] = new StaticObject(0, 0, 40, 200);
+        staticObjects[4] = new StaticObject(0, 0, 40, 200);
+        staticObjects[5] = new StaticObject(0, 0, 40, 200);
+        staticObjects[6] = new StaticObject(0, 0, 40, 200);
+        staticObjects[7] = new StaticObject(0, 0, 40, 200);
+
+        return staticObjects;
     }
 
     private void init(Scenario scenario) {
