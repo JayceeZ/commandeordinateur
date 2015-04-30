@@ -42,18 +42,9 @@ public class Field extends JPanel implements ActionListener {
 
         movableObject = new MovableObject(MASS, 400, 0);
         movableObject.setCommand(new Command(600,200,0.0514048,0.1265232));
-        movableObject.setCommandOn(true);
+        //movableObject.setCommandOn(true);
 
-        staticObjects = new StaticObject[8];
-
-        staticObjects[0] = new StaticObject(0, 0, 40, 200);
-        staticObjects[1] = new StaticObject(100, 100, 200, 200);
-        staticObjects[2] = new StaticObject(280, 100, 400, 140);
-        staticObjects[3] = new StaticObject(0, 0, 40, 200);
-        staticObjects[4] = new StaticObject(0, 0, 40, 200);
-        staticObjects[5] = new StaticObject(0, 0, 40, 200);
-        staticObjects[6] = new StaticObject(0, 0, 40, 200);
-        staticObjects[7] = new StaticObject(0, 0, 40, 200);
+        staticObjects = StaticObject.buildLevel();
 
         G = -9.81;
     }
@@ -101,7 +92,7 @@ public class Field extends JPanel implements ActionListener {
         if(movableObject.isCommandOn()){
             Command command = movableObject.getCommand();
             movableObject.setPx(command.getKx()*(command.getXf()-movableObject.getX()));
-            movableObject.setPy(command.getKy() * (command.getYf() - movableObject.getY()));
+            movableObject.setPy(command.getKy()*(command.getYf()-movableObject.getY()));
 
         }
         movableObject.actualizeSpeed();

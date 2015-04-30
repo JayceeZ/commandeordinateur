@@ -192,10 +192,15 @@ public class MovableObject {
     }
 
     public void testCollision(StaticObject staticObject) {
-        int x = (int) this.x;
-        int y = (int) this.y;
+        int x = (int) this.x-SIZE/2;
+        int y = (int) this.y-SIZE/2;
 
-        if(staticObject.appartient(x, y) || staticObject.appartient(x + SIZE, y) || staticObject.appartient(x, y + SIZE) || staticObject.appartient(x + SIZE, y + SIZE)) {
+        if(staticObject.appartient(x, y)
+                || staticObject.appartient(x + SIZE, y)
+                || staticObject.appartient(x, y + SIZE)
+                || staticObject.appartient(x + SIZE, y + SIZE)) {
+            System.out.println("Collision à ("+x+","+y+") avec "+staticObject+"\n");
+            staticObject.colorify(Color.RED);
             this.respawn();
         }
     }

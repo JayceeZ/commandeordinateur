@@ -29,7 +29,7 @@ public class Window extends JFrame implements KeyListener, ActionListener {
         this.setSize(800,600);
         this.setResizable(false);
 
-        field = new Field(Scenario.ERP);
+        field = new Field(Scenario.GAME);
         infoPanel = new InfoPanel();
         this.add(infoPanel, BorderLayout.NORTH);
         this.add(field, BorderLayout.CENTER);
@@ -42,6 +42,9 @@ public class Window extends JFrame implements KeyListener, ActionListener {
 
     public void keyTyped(KeyEvent keyEvent){
         switch(keyEvent.getKeyChar()){
+            case KeyEvent.VK_ESCAPE :
+                System.exit(0);
+                break;
             case 's' :
                 field.changePy(-PUSH_POWER);
                 break;
