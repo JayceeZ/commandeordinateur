@@ -46,6 +46,7 @@ public class MovableObject {
     private boolean commandOn;
     private Command command;
     private boolean landed;
+    private StaticObject landedStaticObject;
 
     public MovableObject(double m, int xi, int yi) {
 
@@ -198,7 +199,7 @@ public class MovableObject {
 
         // bulle d'info
         if(landed)
-            g.drawString("Landed", this.getX()-SIZE/2, (this.getY()-SIZE/2)-1);
+            g.drawString("Posé", this.getX()-SIZE/2, (this.getY()-SIZE/2)-1);
     }
 
     public void testCollision(Field field) {
@@ -240,5 +241,14 @@ public class MovableObject {
     private void land(StaticObject staticObject) {
         this.y = staticObject.getTopY() - SIZE / 2;
         this.landed = true;
+        this.landedStaticObject = staticObject;
+    }
+
+    public boolean isLanded() {
+        return landed;
+    }
+
+    public StaticObject getLandedStaticObject() {
+        return landedStaticObject;
     }
 }

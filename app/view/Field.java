@@ -48,7 +48,7 @@ public class Field extends JPanel implements ActionListener {
     private void initGAME() {
         this.gameStatus = "Mode: Jeu";
 
-        movableObject = new MovableObject(MASS, 400, 20);
+        movableObject = new MovableObject(MASS, 80, 20);
         movableObject.setCommand(new Command(600, 200, 0.0514048, 0.1265232));
         //movableObject.setCommandOn(true);
 
@@ -58,16 +58,13 @@ public class Field extends JPanel implements ActionListener {
     }
 
     private static StaticObject[] buildLevel() {
-        StaticObject[] staticObjects = new StaticObject[8];
+        StaticObject[] staticObjects = new StaticObject[3];
 
         staticObjects[0] = new StaticObject(0, 0, 40, 200);
-        staticObjects[1] = new StaticObject(100, 100, 200, 200);
+        staticObjects[1] = new StaticObject(70, 70, 200, 200);
         staticObjects[2] = new StaticObject(240, 100, 400, 140);
-        staticObjects[3] = new StaticObject(0, 0, 40, 200);
-        staticObjects[4] = new StaticObject(0, 0, 40, 200);
-        staticObjects[5] = new StaticObject(0, 0, 40, 200);
-        staticObjects[6] = new StaticObject(0, 0, 40, 200);
-        staticObjects[7] = new StaticObject(0, 0, 40, 200);
+
+        staticObjects[2].setDestination(true);
 
         return staticObjects;
     }
@@ -119,11 +116,15 @@ public class Field extends JPanel implements ActionListener {
             Command command = movableObject.getCommand();
             movableObject.setPx(command.getKx() * (command.getXf() - movableObject.getX()));
             movableObject.setPy(command.getKy() * (command.getYf() - movableObject.getY()));
-
         }
+
+        // mise à jour de l'objet avec les paramètres
         movableObject.actualizeSpeed();
         movableObject.actualizePosition();
+
+        // tests de collision (avec le bord)
         movableObject.testCollision(this);
+        // tests de collision (avec les solides)
         if (staticObjects != null)
             for (StaticObject staticObject : staticObjects) {
                 movableObject.testCollision(staticObject);
@@ -132,6 +133,12 @@ public class Field extends JPanel implements ActionListener {
         if (observer != null) {
             observer.actualizePosition();
             thetaDegrees = 180 * observer.getThetaObs(movableObject.getX(), movableObject.getY()) / Math.PI;
+        }
+
+        if(movableObject.isLanded() && movableObject.getLandedStaticObject().isDestination()) {
+            gameStatus = "Vous êtes arrivé à destination !";
+        } else {
+            gameStatus = "Courage, vous pouvez y arriver ! (ESPACE pour recommencer)";
         }
     }
 
