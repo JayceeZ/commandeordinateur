@@ -52,8 +52,14 @@ public class Field extends JPanel implements ActionListener {
 
         movableObject = new MovableObject(MASS, 80, 20);
 
+        AutoPilot commands = new AutoPilot();
+
         // commande par retour d'état
-        movableObject.setCommand(new Command(360, 90, 0.5255541, 1.0252537));
+        commands.addCommand(new Command(80, 20, 0, 0));
+        commands.addCommand(new Command(200, 20, 0.5255541, 1.0252537));
+        commands.addCommand(new Command(360, 90, 0.5255541, 1.0252537));
+
+        movableObject.setCommands(commands);
         movableObject.setCommandOn(autopilot);
 
         staticObjects = buildLevel();
@@ -116,15 +122,8 @@ public class Field extends JPanel implements ActionListener {
     }
 
     public void actualizeObjects() {
-        if (movableObject.isCommandOn()) {
-            Command command = movableObject.getCommand();
-            movableObject.setPx(command.getKx() * (command.getXf() - movableObject.getX()));
-            movableObject.setPy(command.getKy() * (command.getYf() - movableObject.getY()));
-        }
-
         // mise à jour de l'objet avec les paramètres
-        movableObject.actualizeSpeed();
-        movableObject.actualizePosition();
+        movableObject.actualize();
 
         // tests de collision (avec le bord)
         movableObject.testCollision(this);

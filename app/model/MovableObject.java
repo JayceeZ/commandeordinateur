@@ -44,9 +44,9 @@ public class MovableObject {
 
     // Commande automatique
     private boolean commandOn;
-    private Command command;
     private boolean landed;
     private StaticObject landedStaticObject;
+    private AutoPilot commands;
 
     public MovableObject(double m, int xi, int yi) {
 
@@ -64,7 +64,6 @@ public class MovableObject {
         this.px = 0;
         this.py = 0;
         this.commandOn = false;
-        this.command = new Command();
     }
 
     public void changePx(double npx) {
@@ -171,14 +170,6 @@ public class MovableObject {
         return py;
     }
 
-    public void setCommand(Command c) {
-        this.command = c;
-    }
-
-    public Command getCommand() {
-        return command;
-    }
-
     public void setCommandOn(boolean c) {
         this.commandOn = c;
     }
@@ -197,6 +188,9 @@ public class MovableObject {
         if(Math.abs(py) > 0.01)
             g.drawLine(this.getX(), this.getY(), this.getX(), (int) (this.getY() - py));
 
+        // points autopilotage
+        if(commandOn)
+            commands.drawPoints(g);
         // bulle d'info
         if(landed)
             g.drawString("Posé", this.getX()-SIZE/2, (this.getY()-SIZE/2)-1);
@@ -250,5 +244,31 @@ public class MovableObject {
 
     public StaticObject getLandedStaticObject() {
         return landedStaticObject;
+    }
+
+    public void setCommands(AutoPilot commands) {
+        this.commands = commands;
+    }
+
+    public AutoPilot getCommands() {
+        return commands;
+    }
+
+    public void actualize() {
+        if(commandOn) {
+            Command command = commands.getCommandState();
+            if (Integer.compare(getX(), command.getXf()) == 0
+                    && Integer.compare(getY(), command.getYf()) == 0) {
+                System.out.println("Objectif de la commande " + command + " atteint");
+                if (commands != null) {
+                    commands.switchNext();
+                }
+            }
+            setPx(command.getKx() * (command.getXf() - x));
+            setPy(command.getKy() * (command.getYf() - y));
+        }
+
+        actualizeSpeed();
+        actualizePosition();
     }
 }

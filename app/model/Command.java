@@ -38,4 +38,8 @@ public class Command {
     public double getKy() {
         return ky;
     }
+
+    public String toString() {
+        return "aller à ("+xf+","+yf+")";
+    }
 }
