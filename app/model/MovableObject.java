@@ -71,6 +71,9 @@ public class MovableObject {
     }
 
     public void changePy(double npy) {
+        if(landed) {
+            landed = false;
+        }
         this.py += npy;
     }
 
@@ -187,9 +190,15 @@ public class MovableObject {
         g.drawRect(this.getX() - SIZE / 2, this.getY() - SIZE / 2, SIZE, SIZE);
 
         // propulsion gauche/droite
-        g.drawLine(this.getX(), this.getY(), (int) (this.getX() - px), this.getY());
+        if(Math.abs(px) > 0.01)
+            g.drawLine(this.getX(), this.getY(), (int) (this.getX() - px), this.getY());
         // propulsion haut/bas
-        g.drawLine(this.getX(), this.getY(), this.getX(), (int) (this.getY() - py));
+        if(Math.abs(py) > 0.01)
+            g.drawLine(this.getX(), this.getY(), this.getX(), (int) (this.getY() - py));
+
+        // bulle d'info
+        if(landed)
+            g.drawString("Landed", this.getX()-SIZE/2, (this.getY()-SIZE/2)-1);
     }
 
     public void testCollision(Field field) {

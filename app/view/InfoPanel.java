@@ -24,6 +24,8 @@ public class InfoPanel extends JPanel {
         objectParams.setLineWrap(true);
         objectParams.setWrapStyleWord(false);
 
+        objectParams.setMargin(new Insets(5,5,5,5));
+
         this.add(objectParams, BorderLayout.NORTH);
 
         this.setPreferredSize(dimension);

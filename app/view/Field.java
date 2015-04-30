@@ -23,9 +23,12 @@ public class Field extends JPanel implements ActionListener {
     // Propriètés physiques du monde
     private static double G;
     private double thetaDegrees;
+    private String gameStatus;
 
     public Field(Scenario scenario, Dimension dimension) {
         this.scenario = scenario;
+        this.gameStatus = "Field loaded, waiting for simulation to start.";
+
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         init(scenario);
 
@@ -34,6 +37,8 @@ public class Field extends JPanel implements ActionListener {
     }
 
     private void initERP() {
+        this.gameStatus = "Mode: Estimation Recursives de paramètres";
+
         G = 0;
         movableObject = new MovableObject(MASS, 20, 200);
         movableObject.setVx(20);
@@ -41,6 +46,7 @@ public class Field extends JPanel implements ActionListener {
     }
 
     private void initGAME() {
+        this.gameStatus = "Mode: Jeu";
 
         movableObject = new MovableObject(MASS, 400, 20);
         movableObject.setCommand(new Command(600, 200, 0.0514048, 0.1265232));
@@ -80,7 +86,7 @@ public class Field extends JPanel implements ActionListener {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        // TODO: Draw the field
+
         if (staticObjects != null)
             for (StaticObject staticObject : staticObjects) {
                 staticObject.dessine(g);
@@ -88,10 +94,13 @@ public class Field extends JPanel implements ActionListener {
 
         // Dessine le vaisseau
         movableObject.dessine(g);
-        g.drawString("(" + movableObject.getX() + "," + movableObject.getY() + ")", movableObject.getX(), movableObject.getY());
+
         if (observer != null) {
             observer.dessine(g);
+
             g.drawString("(" + observer.getX() + "," + observer.getY() + ")", observer.getX(), observer.getY());
+            g.drawString("(" + movableObject.getX() + "," + movableObject.getY() + ")", movableObject.getX(), movableObject.getY());
+
             g.drawLine(movableObject.getX(), movableObject.getY(), observer.getX(), observer.getY());
             g.drawLine(observer.getX(), observer.getY(), observer.getX(), observer.getY() - 100);
         }
@@ -134,13 +143,17 @@ public class Field extends JPanel implements ActionListener {
         return false;
     }
 
-    public String getGameStatusMessage() {
+    public String getGameStatus() {
+        return gameStatus;
+    }
+
+    public String getScenarioData() {
         switch (scenario) {
             case GAME:
-                String propulsion = "Propulsion: Px:" + String.format("%1$.2f", movableObject.getPx()) + " Py:" + String.format("%1$.2f", movableObject.getPy());
-                String vitesse = "Vitesse: Vx:" + String.format("%1$.2f", movableObject.getVx()) + " Vy:" + String.format("%1$.2f", movableObject.getVy());
-                String position = "Position: x:" + movableObject.getX() + " y:" + movableObject.getY();
-                return propulsion + "\n" + vitesse + "\n" + position;
+                String propulsion = "Propulsion:\nPx:" + String.format("%1$.2f", movableObject.getPx()) + "\nPy:" + String.format("%1$.2f", movableObject.getPy());
+                String vitesse = "Vitesse:\nVx:" + String.format("%1$.2f", movableObject.getVx()) + "\nVy:" + String.format("%1$.2f", movableObject.getVy());
+                String position = "Position:\nx:" + movableObject.getX() + " y:" + movableObject.getY();
+                return propulsion + "\n\n" + vitesse + "\n\n" + position;
             case ERP:
                 String theta = "Angle d'observation: " + thetaDegrees;
                 String positionCalc = "Position estimée: " + observer.getEstimation();
@@ -157,6 +170,10 @@ public class Field extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         this.actualizeObjects();
         this.repaint();
+    }
+
+    public void setGameStatus(String text) {
+        this.gameStatus = text;
     }
 
     public void restart() {

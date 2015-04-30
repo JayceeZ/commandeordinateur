@@ -10,7 +10,8 @@ import java.awt.event.*;
  * Created by isoard on 03/03/15.
  */
 public class Window extends JFrame implements KeyListener, ActionListener {
-    private final InfoPanel infoPanel;
+    private final InfoPanel gameStatusPanel;
+    private final InfoPanel dataPanel;
     private final Field field;
 
     // Pas de puissance des réacteurs
@@ -29,11 +30,13 @@ public class Window extends JFrame implements KeyListener, ActionListener {
         this.setSize(800, 600);
         this.setResizable(false);
 
-        field = new Field(Scenario.GAME, new Dimension(600, 600));
-        infoPanel = new InfoPanel(new Dimension(200, 600));
+        field = new Field(Scenario.GAME, new Dimension(600, 580));
+        gameStatusPanel = new InfoPanel(new Dimension(800, 20));
+        dataPanel = new InfoPanel(new Dimension(200, 580));
 
         this.add(field, BorderLayout.CENTER);
-        this.add(infoPanel, BorderLayout.EAST);
+        this.add(gameStatusPanel, BorderLayout.NORTH);
+        this.add(dataPanel, BorderLayout.EAST);
 
         this.addKeyListener(this);
 
@@ -80,10 +83,6 @@ public class Window extends JFrame implements KeyListener, ActionListener {
         //Do nothing
     }
 
-    public void actualize() {
-        infoPanel.display(field.getGameStatusMessage());
-    }
-
     public void start() {
         if (timerField == null)
             timerField = new Timer((int) (Field.Te * 1000), field);
@@ -102,6 +101,7 @@ public class Window extends JFrame implements KeyListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        infoPanel.display(field.getGameStatusMessage());
+        gameStatusPanel.display(field.getGameStatus());
+        dataPanel.display(field.getScenarioData());
     }
 }
