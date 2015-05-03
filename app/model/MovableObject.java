@@ -18,7 +18,7 @@ import java.awt.*;
 public class MovableObject {
     // Taille de l'objet
     private static final int SIZE = 20;
-    private static final double DEADLYSPEED = 15;
+    private static final double DEADLYSPEED = 20;
 
     // Positions initiales
     private int initX;
@@ -254,13 +254,24 @@ public class MovableObject {
         return commands;
     }
 
+    public String distancesToObjective() {
+        double[] values = new double[2];
+        if (commandOn) {
+            Command command = commands.getCommandState();
+            values[0] = Math.abs(command.getXf() - x);
+            values[1] = Math.abs(command.getYf() - y);
+        }
+        return "("+String.format("%1$.2f", values[0])+", "+String.format("%1$.2f", values[1])+")";
+    }
+
     public void actualize() {
         if(commandOn) {
             Command command = commands.getCommandState();
-            if (Integer.compare(getX(), command.getXf()) == 0
-                    && Integer.compare(getY(), command.getYf()) == 0) {
+            if (Math.abs(command.getXf() - x) < 1.5
+                    && Math.abs(command.getYf() - y) < 1.5) {
                 System.out.println("Objectif de la commande " + command + " atteint");
                 if (commands != null) {
+                    System.out.println("Etat au changement: (x="+this.getX()+",y="+this.getY()+",vx="+this.getVx()+",vy="+this.getVy()+")");
                     commands.switchNext();
                 }
             }
@@ -270,5 +281,14 @@ public class MovableObject {
 
         actualizeSpeed();
         actualizePosition();
+    }
+
+    public String getObjective() {
+        String objective = "pas d'objectif";
+        if (commandOn) {
+            Command command = commands.getCommandState();
+            objective = "("+command.getXf()+","+command.getYf()+")";
+        }
+        return objective;
     }
 }

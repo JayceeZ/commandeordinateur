@@ -52,19 +52,17 @@ public class Field extends JPanel implements ActionListener {
 
         movableObject = new MovableObject(MASS, 80, 20);
 
-        AutoPilot commands = new AutoPilot();
-
-        // commande par retour d'état
-        commands.addCommand(new Command(80, 20, 0, 0));
-        commands.addCommand(new Command(200, 20, 0.5255541, 1.0252537));
-        commands.addCommand(new Command(360, 90, 0.5255541, 1.0252537));
-
-        movableObject.setCommands(commands);
+        if(autopilot) {
+            // commande par retour d'état
+            AutoPilot commands = AutoPilot.loadFromFile("Kre.txt");
+            System.out.println(commands);
+            movableObject.setCommands(commands);
+        }
         movableObject.setCommandOn(autopilot);
 
         staticObjects = buildLevel();
 
-        G = -9.81;
+        G = 0;
     }
 
     private static StaticObject[] buildLevel() {
@@ -165,7 +163,11 @@ public class Field extends JPanel implements ActionListener {
                 String propulsion = "Propulsion:\nPx:" + String.format("%1$.2f", movableObject.getPx()) + "\nPy:" + String.format("%1$.2f", movableObject.getPy());
                 String vitesse = "Vitesse:\nVx:" + String.format("%1$.2f", movableObject.getVx()) + "\nVy:" + String.format("%1$.2f", movableObject.getVy());
                 String position = "Position:\nx:" + movableObject.getX() + " y:" + movableObject.getY();
-                return propulsion + "\n\n" + vitesse + "\n\n" + position;
+                String autopilote = "";
+                if(autopilot) {
+                    autopilote = "Autopilote:\n   Objectif: "+movableObject.getObjective()+"\n   Reste: "+movableObject.distancesToObjective();
+                }
+                return propulsion + "\n\n" + vitesse + "\n\n" + position +"\n\n"+autopilote;
             case ERP:
                 String theta = "Angle d'observation: " + thetaDegrees;
                 String positionCalc = "Position estimée: " + observer.getEstimation();

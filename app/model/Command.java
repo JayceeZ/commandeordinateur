@@ -4,12 +4,12 @@ package app.model;
  * Created by alex on 17/3/2558.
  */
 public class Command {
-    private int xf;
-    private int yf;
+    private double xf;
+    private double yf;
     private double kx;
     private double ky;
 
-    public Command(int x, int y, double k1, double k2) {
+    public Command(double x, double y, double k1, double k2) {
         this.xf = x;
         this.yf = y;
         this.kx = k1;
@@ -23,11 +23,11 @@ public class Command {
         this.ky = 0;
     }
 
-    public int getXf() {
+    public double getXf() {
         return xf;
     }
 
-    public int getYf() {
+    public double getYf() {
         return yf;
     }
 
