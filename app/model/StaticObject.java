@@ -29,7 +29,7 @@ public class StaticObject {
      * @param y
      * @return
      */
-    public boolean appartient(int x, int y) {
+    public boolean appartient(double x, double y) {
         if (x > x1 && x < x2) {
             if (y > y1 && y < y2) {
                 return true;

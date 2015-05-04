@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.stream.Stream;
-
 /**
  * Created by isoard on 30/04/15.
  */
@@ -50,6 +48,10 @@ public class AutoPilot {
             state = 0;
     }
 
+    public boolean hasNext() {
+        return (state+1 < commands.size());
+    }
+
     public static AutoPilot loadFromFile(String path) {
         AutoPilot ap = new AutoPilot();
         File file = new File(path);
@@ -84,5 +86,9 @@ public class AutoPilot {
     @Override
     public String toString() {
         return commands.toString();
+    }
+
+    public void reset() {
+        state = 0;
     }
 }

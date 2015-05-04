@@ -32,6 +32,8 @@ public class Field extends JPanel implements ActionListener {
         this.autopilot = false;
 
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        G = 0;
         init(scenario);
 
         this.setPreferredSize(dimension);
@@ -41,7 +43,6 @@ public class Field extends JPanel implements ActionListener {
     private void initERP() {
         this.gameStatus = "Mode: Estimation Recursives de paramètres";
 
-        G = 0;
         movableObject = new MovableObject(MASS, 20, 200);
         movableObject.setVx(20);
         observer = new Observer(200, 200, 100, 0, 0.5);
@@ -61,8 +62,6 @@ public class Field extends JPanel implements ActionListener {
         movableObject.setCommandOn(autopilot);
 
         staticObjects = buildLevel();
-
-        G = 0;
     }
 
     private static StaticObject[] buildLevel() {
@@ -145,7 +144,7 @@ public class Field extends JPanel implements ActionListener {
         }
     }
 
-    public boolean testCollisionBord(int x, int y) {
+    public boolean testCollisionBord(double x, double y) {
         if (x < 0 || y < 0)
             return true;
         if (x > this.getWidth() || y > this.getHeight())
@@ -160,6 +159,7 @@ public class Field extends JPanel implements ActionListener {
     public String getScenarioData() {
         switch (scenario) {
             case GAME:
+                String gravity = "Gravité: "+String.valueOf(getG());
                 String propulsion = "Propulsion:\nPx:" + String.format("%1$.2f", movableObject.getPx()) + "\nPy:" + String.format("%1$.2f", movableObject.getPy());
                 String vitesse = "Vitesse:\nVx:" + String.format("%1$.2f", movableObject.getVx()) + "\nVy:" + String.format("%1$.2f", movableObject.getVy());
                 String position = "Position:\nx:" + movableObject.getX() + " y:" + movableObject.getY();
@@ -167,7 +167,7 @@ public class Field extends JPanel implements ActionListener {
                 if(autopilot) {
                     autopilote = "Autopilote:\n   Objectif: "+movableObject.getObjective()+"\n   Reste: "+movableObject.distancesToObjective();
                 }
-                return propulsion + "\n\n" + vitesse + "\n\n" + position +"\n\n"+autopilote;
+                return gravity+"\n\n"+propulsion + "\n\n" + vitesse + "\n\n" + position +"\n\n"+autopilote;
             case ERP:
                 String theta = "Angle d'observation: " + thetaDegrees;
                 String positionCalc = "Position estimée: " + observer.getEstimation();
@@ -199,5 +199,16 @@ public class Field extends JPanel implements ActionListener {
             autopilot = !autopilot;
         }
         this.restart();
+    }
+
+    public void enableGravity() {
+        if(G == 0) {
+            System.out.printf("Gravité activée");
+            G = -9.81;
+        } else {
+            System.out.printf("Gravité désactivée");
+            G = 0;
+        }
+        restart();
     }
 }

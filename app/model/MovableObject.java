@@ -48,6 +48,14 @@ public class MovableObject {
     private StaticObject landedStaticObject;
     private AutoPilot commands;
 
+    // variables de mémoire d'erreur de pilotage
+    // pour calculer la distance parcourue réelle
+    private double lastx;
+    private double lasty;
+    // le point qui devait être atteint
+    private double lastThx;
+    private double lastThy;
+
     public MovableObject(double m, int xi, int yi) {
 
         // on définie la position initiale
@@ -123,6 +131,8 @@ public class MovableObject {
         py = 0;
         vx = 0;
         vy = 0;
+        if(commandOn)
+            commands.reset();
     }
 
     /**
@@ -197,8 +207,8 @@ public class MovableObject {
     }
 
     public void testCollision(Field field) {
-        int x = (int) this.x - SIZE / 2;
-        int y = (int) this.y - SIZE / 2;
+        double x = this.x - SIZE / 2;
+        double y = this.y - SIZE / 2;
 
         if (field.testCollisionBord(x, y)
                 || field.testCollisionBord(x + SIZE, y)
@@ -209,8 +219,8 @@ public class MovableObject {
     }
 
     public void testCollision(StaticObject staticObject) {
-        int x = (int) this.x - SIZE / 2;
-        int y = (int) this.y - SIZE / 2;
+        double x = this.x - SIZE / 2;
+        double y = this.y - SIZE / 2;
 
         if (staticObject.appartient(x, y)
                 || staticObject.appartient(x + SIZE, y)
@@ -267,16 +277,26 @@ public class MovableObject {
     public void actualize() {
         if(commandOn) {
             Command command = commands.getCommandState();
-            if (Math.abs(command.getXf() - x) < 1.5
-                    && Math.abs(command.getYf() - y) < 1.5) {
+            if (Math.abs(command.getXf() - x) < 6.5
+                    && Math.abs(command.getYf() - y) < 6.5) {
                 System.out.println("Objectif de la commande " + command + " atteint");
                 if (commands != null) {
                     System.out.println("Etat au changement: (x="+this.getX()+",y="+this.getY()+",vx="+this.getVx()+",vy="+this.getVy()+")");
-                    commands.switchNext();
+                    lastx = x;
+                    lasty = y;
+
+                    // on peut aussi lui demander d'être stationnaire sur le dernier point
+                    //if(commands.hasNext())
+                        commands.switchNext();
                 }
             }
-            setPx(command.getKx() * (command.getXf() - x));
-            setPy(command.getKy() * (command.getYf() - y));
+
+            // application de la commande en boucle fermée
+            double px = command.getKx() * ((command.getXf()+lastx)/2 - x);
+            double py = command.getKy() * ((command.getYf()+lasty)/2 - y);
+
+            setPx(px);
+            setPy(py);
         }
 
         actualizeSpeed();
