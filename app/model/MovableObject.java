@@ -34,9 +34,6 @@ public class MovableObject {
     // Vitesse de l'objet
     private double vx;
     private double vy;
-    // Accélération de l'objet
-    private double ax;
-    private double ay;
 
     // Niveau de propulsion des réacteurs
     private double px;
@@ -52,9 +49,6 @@ public class MovableObject {
     // pour calculer la distance parcourue réelle
     private double lastx;
     private double lasty;
-    // le point qui devait être atteint
-    private double lastThx;
-    private double lastThy;
 
     public MovableObject(double m, int xi, int yi) {
 
@@ -67,8 +61,6 @@ public class MovableObject {
         this.y = initY;
         this.vx = 0;
         this.vy = 0;
-        this.ax = 0;
-        this.ay = 0;
         this.px = 0;
         this.py = 0;
         this.commandOn = false;
@@ -258,6 +250,8 @@ public class MovableObject {
 
     public void setCommands(AutoPilot commands) {
         this.commands = commands;
+        commands.getCommandState().setXi(x);
+        commands.getCommandState().setYi(y);
     }
 
     public AutoPilot getCommands() {
@@ -282,18 +276,15 @@ public class MovableObject {
                 System.out.println("Objectif de la commande " + command + " atteint");
                 if (commands != null) {
                     System.out.println("Etat au changement: (x="+this.getX()+",y="+this.getY()+",vx="+this.getVx()+",vy="+this.getVy()+")");
-                    lastx = x;
-                    lasty = y;
-
-                    // on peut aussi lui demander d'être stationnaire sur le dernier point
-                    //if(commands.hasNext())
-                        commands.switchNext();
+                    commands.switchNext();
+                    commands.getCommandState().setXi(x);
+                    commands.getCommandState().setYi(y);
                 }
             }
 
             // application de la commande en boucle fermée
-            double px = command.getKx() * ((command.getXf()+lastx)/2 - x);
-            double py = command.getKy() * ((command.getYf()+lasty)/2 - y);
+            double px = command.getKx() * ((command.getXf()+command.getXi())/2 - x);
+            double py = command.getKy() * ((command.getYf()+command.getYi())/2 - y);
 
             setPx(px);
             setPy(py);

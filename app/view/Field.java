@@ -171,7 +171,12 @@ public class Field extends JPanel implements ActionListener {
             case ERP:
                 String theta = "Angle d'observation: " + thetaDegrees;
                 String positionCalc = "Position estimée: " + observer.getEstimation();
-                return theta + "\n" + positionCalc;
+                String launchedERP = "Appuyez sur L";
+                if(observer.isLaunchedObject()) {
+                    MovableObject launchedObject = observer.getLaunchedObject();
+                    launchedERP = "Objet lancé:\n   Objectif: "+launchedObject.getObjective()+"\n   Reste: "+launchedObject.distancesToObjective();
+                }
+                return theta + "\n\n" + positionCalc+"\n\n" + launchedERP;
         }
         return "";
     }
@@ -210,5 +215,11 @@ public class Field extends JPanel implements ActionListener {
             G = 0;
         }
         restart();
+    }
+
+    public void launchERP() {
+        if(scenario == Scenario.ERP) {
+            observer.launchObject();
+        }
     }
 }
