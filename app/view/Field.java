@@ -65,13 +65,17 @@ public class Field extends JPanel implements ActionListener {
     }
 
     private static StaticObject[] buildLevel() {
-        StaticObject[] staticObjects = new StaticObject[3];
+        StaticObject[] staticObjects = new StaticObject[7];
 
         staticObjects[0] = new StaticObject(0, 0, 40, 200);
         staticObjects[1] = new StaticObject(70, 70, 200, 200);
         staticObjects[2] = new StaticObject(240, 100, 400, 140);
+        staticObjects[3] = new StaticObject(500, 40, 580, 400);
+        staticObjects[4] = new StaticObject(270, 220, 470, 300);
+        staticObjects[5] = new StaticObject(50, 380, 300, 420);
+        staticObjects[6] = new StaticObject(350, 420, 450, 470);
 
-        staticObjects[2].setDestination(true);
+        staticObjects[6].setDestination(true);
 
         return staticObjects;
     }

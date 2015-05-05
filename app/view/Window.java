@@ -30,7 +30,7 @@ public class Window extends JFrame implements KeyListener, ActionListener {
         this.setSize(800, 600);
         this.setResizable(false);
 
-        field = new Field(Scenario.ERP, new Dimension(600, 580));
+        field = new Field(Scenario.GAME, new Dimension(600, 580));
         gameStatusPanel = new InfoPanel(new Dimension(800, 20));
         dataPanel = new InfoPanel(new Dimension(200, 580));
 
@@ -40,7 +40,7 @@ public class Window extends JFrame implements KeyListener, ActionListener {
 
         this.addKeyListener(this);
 
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
         //this.pack();
     }
