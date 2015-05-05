@@ -173,7 +173,7 @@ public class Field extends JPanel implements ActionListener {
                 }
                 return gravity+"\n\n"+propulsion + "\n\n" + vitesse + "\n\n" + position +"\n\n"+autopilote;
             case ERP:
-                String theta = "Angle d'observation: " + thetaDegrees;
+                String theta = "Angle d'observation: " + String.format("%1$.2f",thetaDegrees);
                 String positionCalc = "Position estimée: " + observer.getEstimation();
                 String launchedERP = "Appuyez sur L";
                 if(observer.isLaunchedObject()) {

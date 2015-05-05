@@ -55,16 +55,19 @@ public class Observer {
         this.yp = R * Math.sin(w * t + theta0) + y0;
         this.t += Field.Te;
 
-        if(launchedObject != null)
+        if(launchedObject != null) {
             System.out.println(launchedObject.getCommands());
+
+            // mettre à jour l'origine de launchedObject
+            commandeDePose.setXi(launchedObject.getX());
+            commandeDePose.setYi(launchedObject.getY());
+        }
 
         if (count == 5) {
             count = 0;
             solution = solver.getPosition(xp, yp, theta, t);
             if(launchedObject != null) {
-                // mettre à jour l'origine de launchedObject
-                commandeDePose.setXi(launchedObject.getX());
-                commandeDePose.setYi(launchedObject.getY());
+
 
                 // mettre à jour la destination de launchedObject
                 commandeDePose.setXf(solution[0]);
@@ -100,7 +103,7 @@ public class Observer {
     }
 
     public String getEstimation() {
-        String estimation = "x0:" + solution[0] + " y0:" + solution[1] + " vx: " + solution[2] + " vy:" + solution[3];
+        String estimation = "\nx:" + String.format("%1$.2f",solution[0]) + " y:" + String.format("%1$.2f",solution[1]) + "\nvx: " + String.format("%1$.2f", solution[2]) + " vy:" + String.format("%1$.2f", solution[3]);
         System.out.println(estimation);
         return estimation;
     }
@@ -110,7 +113,7 @@ public class Observer {
 
         // attribution de la commande
         AutoPilot autopilote = new AutoPilot();
-        commandeDePose = new Command(solution[0], solution[1], 0.5255541, 1.0252537);
+        commandeDePose = new Command(solution[0], solution[1], 1, 1);
         commandeDePose.setXi(getX());
         commandeDePose.setYi(getY());
         autopilote.addCommand(commandeDePose);

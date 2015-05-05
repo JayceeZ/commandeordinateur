@@ -271,8 +271,8 @@ public class MovableObject {
     public void actualize() {
         if(commandOn) {
             Command command = commands.getCommandState();
-            if (Math.abs(command.getXf() - x) < 6.5
-                    && Math.abs(command.getYf() - y) < 6.5) {
+            if (Math.abs(command.getXf() - x) <= 1
+                    && Math.abs(command.getYf() - y) <= 1) {
                 System.out.println("Objectif de la commande " + command + " atteint");
                 if (commands != null) {
                     System.out.println("Etat au changement: (x="+this.getX()+",y="+this.getY()+",vx="+this.getVx()+",vy="+this.getVy()+")");
@@ -287,7 +287,7 @@ public class MovableObject {
             double py = command.getKy() * ((command.getYf()+command.getYi())/2 - y);
 
             setPx(px);
-            setPy(py);
+            setPy(py+Field.getG());
         }
 
         actualizeSpeed();
@@ -298,7 +298,7 @@ public class MovableObject {
         String objective = "pas d'objectif";
         if (commandOn) {
             Command command = commands.getCommandState();
-            objective = "("+command.getXf()+","+command.getYf()+")";
+            objective = "("+String.format("%1$.2f",command.getXf())+", "+String.format("%1$.2f", command.getYf()) + ")";
         }
         return objective;
     }
