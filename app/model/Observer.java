@@ -57,10 +57,6 @@ public class Observer {
 
         if(launchedObject != null) {
             System.out.println(launchedObject.getCommands());
-
-            // mettre à jour l'origine de launchedObject
-            commandeDePose.setXi(launchedObject.getX());
-            commandeDePose.setYi(launchedObject.getY());
         }
 
         if (count == 5) {
@@ -68,13 +64,13 @@ public class Observer {
             solution = solver.getPosition(xp, yp, theta, t);
             if(launchedObject != null) {
 
-
-                // mettre à jour la destination de launchedObject
+                // mettre à jour la destination de la commande du launchedObject
                 commandeDePose.setXf(solution[0]);
                 commandeDePose.setYf(solution[1]);
 
-                // activation commande
-                launchedObject.setCommandOn(true);
+                // mettre à jour la vitesse de la commande du launchedObject
+                commandeDePose.setVxf(solution[2]);
+                commandeDePose.setVyf(solution[3]);
             }
         }
 
@@ -113,11 +109,12 @@ public class Observer {
 
         // attribution de la commande
         AutoPilot autopilote = new AutoPilot();
-        commandeDePose = new Command(solution[0], solution[1], 1, 1);
-        commandeDePose.setXi(getX());
-        commandeDePose.setYi(getY());
+        commandeDePose = new Command(solution[0], solution[1], solution[2], solution[3], 0.5, 1);
         autopilote.addCommand(commandeDePose);
         launchedObject.setCommands(autopilote);
+
+        // activation commande
+        launchedObject.setCommandOn(true);
     }
 
     public boolean isLaunchedObject() {

@@ -250,8 +250,6 @@ public class MovableObject {
 
     public void setCommands(AutoPilot commands) {
         this.commands = commands;
-        commands.getCommandState().setXi(x);
-        commands.getCommandState().setYi(y);
     }
 
     public AutoPilot getCommands() {
@@ -271,20 +269,18 @@ public class MovableObject {
     public void actualize() {
         if(commandOn) {
             Command command = commands.getCommandState();
-            if (Math.abs(command.getXf() - x) <= 1
-                    && Math.abs(command.getYf() - y) <= 1) {
+            if (Math.abs(command.getXf() - x) <= 3
+                    && Math.abs(command.getYf() - y) <= 3) {
                 System.out.println("Objectif de la commande " + command + " atteint");
                 if (commands != null) {
-                    System.out.println("Etat au changement: (x="+this.getX()+",y="+this.getY()+",vx="+this.getVx()+",vy="+this.getVy()+")");
+                    System.out.println("Etat au changement: (x=" + this.getX() + ",y=" + this.getY() + ",vx=" + this.getVx() + ",vy=" + this.getVy() + ")");
                     commands.switchNext();
-                    commands.getCommandState().setXi(x);
-                    commands.getCommandState().setYi(y);
                 }
             }
 
             // application de la commande en boucle fermée
-            double px = command.getKx() * ((command.getXf()+command.getXi())/2 - x);
-            double py = command.getKy() * ((command.getYf()+command.getYi())/2 - y);
+            double px = command.getKa() * (command.getXf() - x) + command.getKb() * (command.getVxf() - vx);
+            double py = command.getKa() * (command.getYf() - y) + command.getKb() * (command.getVyf() - vy);
 
             setPx(px);
             setPy(py+Field.getG());

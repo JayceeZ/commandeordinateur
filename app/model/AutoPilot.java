@@ -23,9 +23,9 @@ public class AutoPilot {
     }
 
     public Command getCommandState() {
-        if(commands.size() > state)
+        if(state < commands.size())
             return commands.get(state);
-        return new Command();
+        return commands.get(0);
     }
 
     public void drawPoints(Graphics g) {
@@ -42,10 +42,10 @@ public class AutoPilot {
     }
 
     public void switchNext() {
-        if(state < commands.size())
+        if(state < commands.size()-1)
             state++;
         else
-            state = 0;
+            System.out.println("Fin des commandes");
     }
 
     public boolean hasNext() {

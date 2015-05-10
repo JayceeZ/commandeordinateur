@@ -4,27 +4,37 @@ package app.model;
  * Created by alex on 17/3/2558.
  */
 public class Command {
-    private double xi;
-    private double yi;
+    private double vxf;
+    private double vyf;
     private double xf;
     private double yf;
-    private double kx;
-    private double ky;
+    private double ka;
+    private double kb;
 
-    public Command(double x, double y, double k1, double k2) {
-        this.xi = 0;
-        this.yi = 0;
+    public Command(double x, double y, double vx, double vy, double k1, double k2) {
         this.xf = x;
         this.yf = y;
-        this.kx = k1;
-        this.ky = k2;
+        this.vxf = vx;
+        this.vyf = vy;
+        this.ka = k1;
+        this.kb = k2;
+    }
+
+    public Command(double x, double y, double k1, double k2) {
+        this.xf = x;
+        this.yf = y;
+        this.vxf = 0;
+        this.vyf = 0;
+
+        this.ka = k1;
+        this.kb = k2;
     }
 
     public Command() {
         this.xf = 0;
         this.yf = 0;
-        this.kx = 0;
-        this.ky = 0;
+        this.ka = 1;
+        this.kb = 1;
     }
 
     public double getXf() {
@@ -43,31 +53,31 @@ public class Command {
         yf = y;
     }
 
-    public void setXi(double x) {
-        xi = x;
+    public double getKa() {
+        return ka;
     }
 
-    public void setYi(double y) {
-        yi = y;
-    }
-
-    public double getKx() {
-        return kx;
-    }
-
-    public double getKy() {
-        return ky;
+    public double getKb() {
+        return kb;
     }
 
     public String toString() {
         return "aller à ("+xf+","+yf+")";
     }
 
-    public double getXi() {
-        return xi;
+    public double getVxf() {
+        return vxf;
     }
 
-    public double getYi() {
-        return yi;
+    public void setVxf(double vxf) {
+        this.vxf = vxf;
+    }
+
+    public double getVyf() {
+        return vyf;
+    }
+
+    public void setVyf(double vyf) {
+        this.vyf = vyf;
     }
 }
